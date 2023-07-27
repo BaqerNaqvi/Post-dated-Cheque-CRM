@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PaymentStatusComponent } from './shared/components/payment-status/payment-status.component';
 import { MonthsComponent } from './shared/components/months/months.component';
 import { PaymentMethodComponent } from './shared/components/payment-method/payment-method.component';
+import { TopNavComponent } from './shared/components/top-nav/top-nav.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { PaymentMethodComponent } from './shared/components/payment-method/payme
     DuePaymentsComponent,
     PaymentStatusComponent,
     MonthsComponent,
-    PaymentMethodComponent
+    PaymentMethodComponent,
+    TopNavComponent
   ],
   imports: [
     BrowserModule,
