@@ -17,6 +17,7 @@
 
         public string? AgreementDates { get; set; }
         public string? CompanyName { get; set; }
+        public string? CompanyBranchOfc { get; set; }
         public string? ReceiverBankName { get; set; }
         public string? SenderBankName { get; set; }
     }

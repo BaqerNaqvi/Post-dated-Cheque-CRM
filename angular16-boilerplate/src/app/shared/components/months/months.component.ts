@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
 declare var $: any;
 
 interface Month {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -12,30 +12,57 @@ interface Month {
 })
 export class MonthsComponent implements AfterViewInit {
   @Output() selectedMonthChange = new EventEmitter<number>();
-  months: Month[] = [
-    { id: 1, name: 'January' },
-    { id: 2, name: 'February' },
-    { id: 3, name: 'March' },
-    { id: 4, name: 'April' },
-    { id: 5, name: 'May' },
-    { id: 6, name: 'June' },
-    { id: 7, name: 'July' },
-    { id: 8, name: 'August' },
-    { id: 9, name: 'September' },
-    { id: 10, name: 'October' },
-    { id: 11, name: 'November' },
-    { id: 12, name: 'December' },
-  ];
+  months: Month[] = [];
 
   selectedMonth: number = 0; // You can set the default selected month here if needed
 
   ngAfterViewInit(): void {
+    this.populateMonths();
+
     $('#monthDdl').on('select2:select', (e: any) => {
-      var data = e.params.data;
+      const data = e.params.data;
       console.log(data);
       this.selectedMonth = data.id;
       this.selectedMonthChange.emit(this.selectedMonth);
     });
   }
-  
+
+  populateMonths(): void {
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // Get the current month (0-indexed)
+    const currentYear = currentDate.getFullYear();
+
+    // Add "ALL" option to the months array
+    // this.months.push({ id: 0, name: 'All' });
+
+    for (let i = 0; i < 12; i++) {
+      const monthNumber = (currentMonth + i) % 12 || 12; // Loop back to December after January
+      const year = currentYear + Math.floor((currentMonth + i - 1) / 12); // Increment year after December
+
+      const month: Month = {
+        id: monthNumber+'-'+year,
+        name: this.getMonthWithYear(monthNumber, year)
+      };
+
+      this.months.push(month);
+    }
+  }
+
+  getMonthWithYear(monthNumber: number, year: number): string {
+    const monthNames: string[] = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    return `${monthNames[monthNumber - 1]}-${year}`;
+  }
 }

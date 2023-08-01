@@ -14,7 +14,8 @@ namespace DAL.DbContexts
 
         public DefaultContext(DbContextOptions<DefaultContext> options)
             : base(options)
-        {}
+        {
+        }
 
         public virtual DbSet<Agreement> Agreements { get; set; } = null!;
         public virtual DbSet<Bank> Banks { get; set; } = null!;
@@ -42,6 +43,10 @@ namespace DAL.DbContexts
                 entity.HasIndex(e => e.CompanyId, "company_agreements_fk_idx");
 
                 entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Branch)
+                    .HasMaxLength(45)
+                    .HasColumnName("branch");
 
                 entity.Property(e => e.CompanyId).HasColumnName("company_id");
 

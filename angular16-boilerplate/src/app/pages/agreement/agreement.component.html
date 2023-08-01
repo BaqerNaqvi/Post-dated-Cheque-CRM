@@ -1,0 +1,133 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Agreements</h1>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </div>
+  
+  
+  <!-- Main content -->
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+  
+            <div class="card-header">
+              <h3 class="card-title">Filters</h3>
+              <div class="float-right">
+                <button class="btn-default mr_5" (click)="searchAgreements()">Search</button>
+                <button class="btn-default" (click)="clearSearchFilters()">Clear</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <!-- <div class="col-sm-2">
+                  <div class="form-group">
+                    <label for="monthDdl">Month</label>
+  
+                    <app-month-select (selectedMonthChange)="onMonthSelected($event)"></app-month-select>
+                  </div>
+                </div> -->
+                <!-- <div class="col-sm-2">
+                  <div class="form-group">
+                    <label for="bankDdl">Sender Bank</label>
+                    <select id="bankDdl" class="form-control select2bs4" style="width: 100%;"
+                      [(ngModel)]="paymentSearchFilter.bankId" name="bankDdl" required>
+                      <option *ngFor="let category of banks" [value]="category.id">
+                        {{category.name}}</option>
+                    </select>
+                  </div>
+                </div> -->
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <label for="companyDdl">Company</label>
+                    <select id="companyDdl" class="form-control select2bs4" style="width: 100%;"
+                      [(ngModel)]="paymentSearchFilter.companyId" name="companyDdl" required>
+                      <option *ngFor="let category of companies" [value]="category.id">
+                        {{category.name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- <div class="col-sm-2">
+                  <div class="form-group">
+                    <label for="agreementDdl">Agreement</label>
+                    <select id="agreementDdl" class="form-control select2bs4" style="width: 100%;"
+                      [(ngModel)]="paymentSearchFilter.agreementId" name="agreementDdl" required>
+                      <option *ngFor="let category of agreements" [value]="category.id">
+                        {{category.startDate | date:'dd-MMM-y'}} : {{category.endDate | date:'dd-MMM-y'}}</option>
+                    </select>
+                  </div>
+                </div> -->
+                <!-- <div class="col-sm-2">
+                  <div class="form-group">
+                    <label for="paymentMethodDdl">Payment Method</label>
+                    <app-payment-method-select
+                      (selectedPaymentMethodChange)="onPaymentMethodSelected($event)"></app-payment-method-select>
+                  </div>
+                </div> -->
+                <!-- <div class="col-sm-2">
+                  <div class="form-group">
+                    <label for="agreementDdl">Branch</label>
+                    <input type="text" id="branchTxt" class="form-control" [(ngModel)]="paymentSearchFilter.branch" name="branchTxt" required/>
+                  </div>
+                </div> -->
+                
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Agreements</h3>
+            </div>
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>Company</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>           
+                    <th>Branch</th>           
+                    <th>Floor</th>
+                    <th>Office No</th>
+                    <th>Section</th>  
+                    <th>Work Station</th>
+                    <th>Notes</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of agreements; let i = index">
+                    <td>{{getCompanyName(item.companyId)}}</td>
+                    <td>{{item.startDate | date:'dd-MMM-y'}}</td>
+                    <td>{{item.endDate | date:'dd-MMM-y'}}</td>
+                    <td>{{ item.branch }}</td>
+                    <td>{{item.floor}}</td>
+                    <td>{{item.officeNumber}}</td>
+                    <td>{{item.section}}</td>  
+                    <td>{{item.workStation}}</td>
+                    <td>{{item.description}}</td>
+                    <td>
+                        <a [routerLink]="[item.id]">Edit</a>
+                    </td>
+                  </tr>
+  
+                </tbody>
+  
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content -->

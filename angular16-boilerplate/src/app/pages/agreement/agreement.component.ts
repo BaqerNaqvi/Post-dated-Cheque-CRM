@@ -11,13 +11,12 @@ import { Company } from 'src/app/shared/models/company';
 import { Payment } from 'src/app/shared/models/payment';
 
 declare var $: any;
-
 @Component({
-  selector: 'app-due-payments',
-  templateUrl: './due-payments.component.html',
-  styleUrls: ['./due-payments.component.css']
+  selector: 'app-agreement',
+  templateUrl: './agreement.component.html',
+  styleUrls: ['./agreement.component.css']
 })
-export class DuePaymentsComponent implements AfterViewInit {
+export class AgreementComponent implements AfterViewInit {
   selectedCompanyId: any;
   selectedMonth: string;
   selectedPaymentMethod: number;
@@ -80,9 +79,13 @@ export class DuePaymentsComponent implements AfterViewInit {
     // this.searchPayment();
   }
 
-  searchPayment() {
-    this.paymentService.Search(this.paymentSearchFilter).subscribe((result: any) => {
-      this.payments = result.data.sort((a: Payment, b: Payment) => a.paymentDueDate > b.paymentDueDate ? 1 : -1);
+  getCompanyName(id: number) {
+    return this.companies.find(x => x.id == id)?.name
+  }
+
+  searchAgreements() {
+    this.agreementService.Search(this.paymentSearchFilter).subscribe((result: any) => {
+      this.agreements = result.data.sort((a: Agreement, b: Agreement) => a.startDate > b.startDate ? 1 : -1);
     });
   }
 
@@ -92,7 +95,11 @@ export class DuePaymentsComponent implements AfterViewInit {
     });
   }
 
-
+  getAllAgreements() {
+    this.agreementService.GetAll().subscribe((result: any) => {
+      this.agreements = result.data.sort((a: Agreement, b: Agreement) => a.startDate > b.startDate ? 1 : -1);
+    });
+  }
 
   getAllBanks() {
     this.bankService.GetAll().subscribe((result: any) => {
@@ -127,7 +134,7 @@ export class DuePaymentsComponent implements AfterViewInit {
       var data = e.params.data;
       console.log(data);
       this.paymentSearchFilter.companyId = data.id;
-      this.getAgreementByCompanyId();
+      // this.getAgreementByCompanyId();
     });
 
     $('#agreementDdl').on('select2:select', (e: any) => {

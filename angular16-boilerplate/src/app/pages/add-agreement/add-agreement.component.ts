@@ -1,4 +1,5 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AgreementService } from 'src/app/services/agreement.service';
 import { BankService } from 'src/app/services/bank.service';
 import { CompanyService } from 'src/app/services/company.service';
@@ -9,15 +10,14 @@ import { Agreement } from 'src/app/shared/models/agreement';
 import { Bank } from 'src/app/shared/models/bank';
 import { Company } from 'src/app/shared/models/company';
 import { Payment } from 'src/app/shared/models/payment';
-
 declare var $: any;
 
 @Component({
-  selector: 'app-due-payments',
-  templateUrl: './due-payments.component.html',
-  styleUrls: ['./due-payments.component.css']
+  selector: 'app-add-agreement',
+  templateUrl: './add-agreement.component.html',
+  styleUrls: ['./add-agreement.component.css']
 })
-export class DuePaymentsComponent implements AfterViewInit {
+export class AddAgreementComponent implements AfterViewInit, OnInit {
   selectedCompanyId: any;
   selectedMonth: string;
   selectedPaymentMethod: number;
@@ -34,9 +34,9 @@ export class DuePaymentsComponent implements AfterViewInit {
   companies: Company[] = [];
   banks: Bank[] = [];
   payments: Payment[] = [];
-  agreements: Agreement[] = [];
+  agreement: Agreement = new Agreement(0, 0, new Date(), new Date());
 
-  constructor(public paymentService: PaymentService, public agreementService: AgreementService, public bankService: BankService, public companyService: CompanyService) {
+  constructor(public paymentService: PaymentService, public agreementService: AgreementService, public bankService: BankService, public companyService: CompanyService, private route: ActivatedRoute, private router: Router) {
 
   }
 
@@ -71,6 +71,12 @@ export class DuePaymentsComponent implements AfterViewInit {
   paymentStatusOptions = Object.values(PaymentStatusEnum).map(value => ({ name: PaymentStatusEnum[value as number], value }));
 
   ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      const id = params['id'];
+      if (parseInt(id) > 0) {
+        this.getAgreementById(id);
+      }
+    });
     this.getAllBanks();
     this.getAllCompannies();
   }
@@ -86,13 +92,11 @@ export class DuePaymentsComponent implements AfterViewInit {
     });
   }
 
-  getAgreementByCompanyId() {
-    this.agreementService.GetByCompanyId(this.paymentSearchFilter.companyId).subscribe((result: any) => {
-      this.agreements = result.data.sort((a: Agreement, b: Agreement) => a.startDate > b.startDate ? 1 : -1);
+  getAgreementById(id: number) {
+    this.agreementService.GetById(id).subscribe((result: any) => {
+      this.agreement = result.data;
     });
   }
-
-
 
   getAllBanks() {
     this.bankService.GetAll().subscribe((result: any) => {
@@ -127,7 +131,6 @@ export class DuePaymentsComponent implements AfterViewInit {
       var data = e.params.data;
       console.log(data);
       this.paymentSearchFilter.companyId = data.id;
-      this.getAgreementByCompanyId();
     });
 
     $('#agreementDdl').on('select2:select', (e: any) => {
@@ -140,7 +143,9 @@ export class DuePaymentsComponent implements AfterViewInit {
       var data = e.params.data;
       this.paymentSearchFilter.bankId = data.id;
     });
-
+    $('#startdate').datetimepicker({
+      format: 'L'
+    });
     // ($("#example1") as any).DataTable({
     //   "responsive": true, "lengthChange": false, "autoWidth": false,
     //   "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]

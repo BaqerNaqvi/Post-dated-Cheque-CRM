@@ -28,7 +28,15 @@ export class AgreementService {
   }
 
   GetByCompanyId(compId: number) {
-    return this.http.get<Agreement[]>(this.baseurl + '/api/agreement/' + compId);
+    return this.http.get<Agreement[]>(this.baseurl + '/api/agreement/company/' + compId);
+  }
+
+  GetById(id: number) {
+    return this.http.get<Agreement[]>(this.baseurl + '/api/agreement/' + id);
+  }
+
+  GetAll() {
+    return this.http.get<Agreement[]>(this.baseurl + '/api/agreement');
   }
 
 

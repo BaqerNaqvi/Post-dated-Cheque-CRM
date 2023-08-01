@@ -22,6 +22,8 @@
         public int? paymentMethodId { get; set; }
         public int? companyId { get; set; }
         public int? month { get; set; }
+        public int? year { get; set; }
+        public string? branch { get; set; }
     }
 
     public class AgreementFilters : PagingParams

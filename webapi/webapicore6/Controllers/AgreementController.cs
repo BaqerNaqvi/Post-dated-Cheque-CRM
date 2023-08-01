@@ -57,7 +57,7 @@ namespace webapicore6.Controllers
 
 
         [AllowAnonymous]
-        [HttpGet("{companyid}")]
+        [HttpGet("company/{companyid}")]
         public async Task<IActionResult> GetAgreementsByCompanyId(int companyid)
         {
             try
@@ -70,9 +70,23 @@ namespace webapicore6.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAgreementById(int id)
+        {
+            try
+            {
+                return Ok(new ResponseDto<AgreementDto>(HttpStatusCode.OK, "", _mapper.Map<AgreementDto>(await _service.GetAgreementAsync(id)), null));
+            }
+            catch (Exception e)
+            {
+                return Ok(new ResponseDto<AgreementDto>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
+            }
+        }
+
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("add")]
-        public async Task<IActionResult> AddPayment([FromForm] PaymentDto dto)
+        public async Task<IActionResult> Add([FromForm] AgreementDto dto)
         {
             try
             {
@@ -97,24 +111,24 @@ namespace webapicore6.Controllers
                     //model.RecUpdatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     
                     var data = await _service.AddAgreementAsync(_mapper.Map<Agreement>(dto));
-                    return Ok(new ResponseDto<PaymentDto>(HttpStatusCode.OK, "", dto, null));
+                    return Ok(new ResponseDto<AgreementDto>(HttpStatusCode.OK, "", dto, null));
                 }
                 else
                 {
-                    var response = new ResponseDto<PaymentDto>(HttpStatusCode.InternalServerError, "Model is not valid.", null);
+                    var response = new ResponseDto<AgreementDto>(HttpStatusCode.InternalServerError, "Model is not valid.", null);
                     return Ok(response);
                 }
 
             }
             catch (Exception e)
             {
-                return Ok(new ResponseDto<List<PaymentDto>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
+                return Ok(new ResponseDto<List<AgreementDto>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
             }
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("update")]
-        public async Task<IActionResult> UpdatePayment([FromForm] PaymentDto dto)
+        public async Task<IActionResult> Update([FromForm] AgreementDto dto)
         {
             try
             {
@@ -149,42 +163,42 @@ namespace webapicore6.Controllers
                     //model.RecUpdatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     
                     var data = await _service.UpdateAgreementAsync(model);
-                    return Ok(new ResponseDto<PaymentDto>(HttpStatusCode.OK, "", dto, null));
+                    return Ok(new ResponseDto<AgreementDto>(HttpStatusCode.OK, "", dto, null));
                 }
                 else
                 {
-                    var response = new ResponseDto<PaymentDto>(HttpStatusCode.InternalServerError, "Model is not valid.", null);
+                    var response = new ResponseDto<AgreementDto>(HttpStatusCode.InternalServerError, "Model is not valid.", null);
                     return Ok(response);
                 }
 
             }
             catch (Exception e)
             {
-                return Ok(new ResponseDto<List<PaymentDto>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
+                return Ok(new ResponseDto<List<AgreementDto>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
             }
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> DeletePayment(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var data = await _service.DeleteAgreementAsync(id);
-                    return Ok(new ResponseDto<PaymentDto>(HttpStatusCode.OK, "", null, null));
+                    return Ok(new ResponseDto<AgreementDto>(HttpStatusCode.OK, "", null, null));
                 }
                 else
                 {
-                    var response = new ResponseDto<PaymentDto>(HttpStatusCode.InternalServerError, "Model is not valid.", null);
+                    var response = new ResponseDto<AgreementDto>(HttpStatusCode.InternalServerError, "Model is not valid.", null);
                     return Ok(response);
                 }
 
             }
             catch (Exception e)
             {
-                return Ok(new ResponseDto<List<PaymentDto>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
+                return Ok(new ResponseDto<List<AgreementDto>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
             }
         }
     }

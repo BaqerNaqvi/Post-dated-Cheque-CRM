@@ -13,6 +13,7 @@ export class Payment {
     public paymentClearanceDate?: Date | null;
     public agreementDates?: string | null;
     public companyName?: string | null;
+    public companyBranchOfc?: string | null;
     public receiverBankName?: string | null;
     public senderBankName?: string | null;
 

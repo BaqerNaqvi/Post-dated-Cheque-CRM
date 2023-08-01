@@ -10,6 +10,8 @@ import { PaymentStatusComponent } from './shared/components/payment-status/payme
 import { MonthsComponent } from './shared/components/months/months.component';
 import { PaymentMethodComponent } from './shared/components/payment-method/payment-method.component';
 import { TopNavComponent } from './shared/components/top-nav/top-nav.component';
+import { AgreementComponent } from './pages/agreement/agreement.component';
+import { AddAgreementComponent } from './pages/add-agreement/add-agreement.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { TopNavComponent } from './shared/components/top-nav/top-nav.component';
     PaymentStatusComponent,
     MonthsComponent,
     PaymentMethodComponent,
-    TopNavComponent
+    TopNavComponent,
+    AgreementComponent,
+    AddAgreementComponent
   ],
   imports: [
     BrowserModule,

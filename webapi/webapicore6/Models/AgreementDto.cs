@@ -13,5 +13,6 @@ namespace webapicore6.Models
         public string? OfficeNumber { get; set; }
         public string? Section { get; set; }
         public string? WorkStation { get; set; }
+        public string? Branch { get; set; }
     }
 }

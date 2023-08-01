@@ -19,6 +19,7 @@ namespace DAL.Models
         public string? OfficeNumber { get; set; }
         public string? Section { get; set; }
         public string? WorkStation { get; set; }
+        public string? Branch { get; set; }
 
         public virtual Company Company { get; set; } = null!;
         public virtual ICollection<Payment> Payments { get; set; }

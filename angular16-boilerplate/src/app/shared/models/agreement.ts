@@ -8,6 +8,7 @@ export class Agreement {
     public officeNumber?: string | null;
     public section?: string | null;
     public workStation?: string | null;
+    public branch?: string | null;
   
     constructor(
       id: number,
@@ -18,7 +19,8 @@ export class Agreement {
       floor?: string | null,
       officeNumber?: string | null,
       section?: string | null,
-      workStation?: string | null
+      workStation?: string | null,
+      branch?: string | null
     ) {
       this.id = id;
       this.companyId = companyId;
@@ -29,5 +31,6 @@ export class Agreement {
       this.officeNumber = officeNumber;
       this.section = section;
       this.workStation = workStation;
+      this.branch = branch;
     }
   }
