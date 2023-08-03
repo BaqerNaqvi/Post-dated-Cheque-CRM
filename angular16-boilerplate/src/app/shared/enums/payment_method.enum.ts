@@ -1,6 +1,5 @@
 export enum PaymentMethodEnum {
-    Cheque,
-    Cash,
-    Advanced,
-    Online
+  Cheque,
+  Cash,
+  Online,
 }

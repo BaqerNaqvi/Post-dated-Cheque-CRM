@@ -8,7 +8,7 @@ interface Month {
 
 @Component({
   selector: 'app-month-select',
-  templateUrl: './months.component.html'
+  templateUrl: './months.component.html',
 })
 export class MonthsComponent implements AfterViewInit {
   @Output() selectedMonthChange = new EventEmitter<number>();
@@ -29,19 +29,19 @@ export class MonthsComponent implements AfterViewInit {
 
   populateMonths(): void {
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth() + 1; // Get the current month (0-indexed)
+    const currentMonth = currentDate.getMonth() - 2; // Get the current month (0-indexed)
     const currentYear = currentDate.getFullYear();
 
     // Add "ALL" option to the months array
     // this.months.push({ id: 0, name: 'All' });
 
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 18; i++) {
       const monthNumber = (currentMonth + i) % 12 || 12; // Loop back to December after January
       const year = currentYear + Math.floor((currentMonth + i - 1) / 12); // Increment year after December
 
       const month: Month = {
-        id: monthNumber+'-'+year,
-        name: this.getMonthWithYear(monthNumber, year)
+        id: monthNumber + '-' + year,
+        name: this.getMonthWithYear(monthNumber, year),
       };
 
       this.months.push(month);
@@ -61,7 +61,7 @@ export class MonthsComponent implements AfterViewInit {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ];
     return `${monthNames[monthNumber - 1]}-${year}`;
   }
