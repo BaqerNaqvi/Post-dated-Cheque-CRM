@@ -1,13 +1,20 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+import { PaymentMethodEnum } from '../../enums/payment_method.enum';
 declare var $: any;
-enum PaymentMethodEnum {
-  Cheque,
-  Cash,
-  Advanced,
-  Online,
-}
+// enum PaymentMethodEnum {
+//   Cheque,
+//   Cash,
+//   Advanced,
+//   Online,
+// }
 
-interface PaymentMethod   {
+interface PaymentMethod {
   id: number;
   name: string;
 }
@@ -15,8 +22,16 @@ interface PaymentMethod   {
 @Component({
   selector: 'app-payment-method-select',
   template: `
-    <select [(ngModel)]="selectedPaymentMethod" (change)="onPaymentMethodChange()" id="paymentMethodDdl" class="form-control select2bs4" style="width: 100%;">
-      <option *ngFor="let method of paymentMethods" [value]="method.id">{{ method.name }}</option>
+    <select
+      [(ngModel)]="selectedPaymentMethod"
+      (change)="onPaymentMethodChange()"
+      id="paymentMethodDdl"
+      class="form-control select2bs4"
+      style="width: 100%;"
+    >
+      <option *ngFor="let method of paymentMethods" [value]="method.id">
+        {{ method.name }}
+      </option>
     </select>
   `,
 })
@@ -27,7 +42,7 @@ export class PaymentMethodComponent implements AfterViewInit {
     // { id: PaymentMethodEnum.All, name: 'All' },
     { id: PaymentMethodEnum.Cheque, name: 'Cheque' },
     { id: PaymentMethodEnum.Cash, name: 'Cash' },
-    { id: PaymentMethodEnum.Advanced, name: 'Advanced' },
+    // { id: PaymentMethodEnum.Advanced, name: 'Advanced' },
     { id: PaymentMethodEnum.Online, name: 'Online' },
   ];
 

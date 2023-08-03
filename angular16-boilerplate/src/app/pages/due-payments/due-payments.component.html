@@ -6,9 +6,9 @@
         <h1>Due Payments</h1>
       </div>
     </div>
-  </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.container-fluid -->
 </div>
-
 
 <!-- Main content -->
 <div class="content">
@@ -16,12 +16,22 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-
           <div class="card-header">
-            <h3 class="card-title">Filters</h3>
-            <div class="float-right">
-              <button class="btn-default mr_5" (click)="searchPayment()">Search</button>
-              <button class="btn-default" (click)="clearSearchFilters()">Clear</button>
+            <h3 style="margin-top: 12px" class="card-title">Filters</h3>
+            <div class="float-right" style="display: flex">
+              <button
+                class="btn btn-block btn-default"
+                (click)="searchPayment()"
+              >
+                Search
+              </button>
+              <button
+                class="btn btn-block btn-default"
+                (click)="clearSearchFilters()"
+                style="margin-top: 0px !important; margin-left: 12px"
+              >
+                Clear
+              </button>
             </div>
           </div>
           <div class="card-body">
@@ -30,26 +40,48 @@
                 <div class="form-group">
                   <label for="monthDdl">Month</label>
 
-                  <app-month-select (selectedMonthChange)="onMonthSelected($event)"></app-month-select>
+                  <app-month-select
+                    (selectedMonthChange)="onMonthSelected($event)"
+                  ></app-month-select>
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
-                  <label for="bankDdl">Sender Bank</label>
-                  <select id="bankDdl" class="form-control select2bs4" style="width: 100%;"
-                    [(ngModel)]="paymentSearchFilter.bankId" name="bankDdl" required>
-                    <option *ngFor="let category of banks" [value]="category.id">
-                      {{category.name}}</option>
+                  <label for="bankDdl">Bank</label>
+                  <select
+                    id="bankDdl"
+                    class="form-control select2bs4"
+                    style="width: 100%"
+                    [(ngModel)]="paymentSearchFilter.bankId"
+                    name="bankDdl"
+                    required
+                  >
+                    <option
+                      *ngFor="let category of banks"
+                      [value]="category.id"
+                    >
+                      {{ category.name }}
+                    </option>
                   </select>
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="companyDdl">Company</label>
-                  <select id="companyDdl" class="form-control select2bs4" style="width: 100%;"
-                    [(ngModel)]="paymentSearchFilter.companyId" name="companyDdl" required>
-                    <option *ngFor="let category of companies" [value]="category.id">
-                      {{category.name}}</option>
+                  <select
+                    id="companyDdl"
+                    class="form-control select2bs4"
+                    style="width: 100%"
+                    [(ngModel)]="paymentSearchFilter.companyId"
+                    name="companyDdl"
+                    required
+                  >
+                    <option
+                      *ngFor="let category of companies"
+                      [value]="category.id"
+                    >
+                      {{ category.name }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -67,16 +99,25 @@
                 <div class="form-group">
                   <label for="paymentMethodDdl">Payment Method</label>
                   <app-payment-method-select
-                    (selectedPaymentMethodChange)="onPaymentMethodSelected($event)"></app-payment-method-select>
+                    (selectedPaymentMethodChange)="
+                      onPaymentMethodSelected($event)
+                    "
+                  ></app-payment-method-select>
                 </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="agreementDdl">Branch</label>
-                  <input type="text" id="branchTxt" class="form-control" [(ngModel)]="paymentSearchFilter.branch" name="branchTxt" required/>
+                  <input
+                    type="number"
+                    id="branchTxt"
+                    class="form-control"
+                    [(ngModel)]="paymentSearchFilter.branch"
+                    name="branchTxt"
+                    required
+                  />
                 </div>
               </div>
-              
             </div>
           </div>
         </div>
@@ -89,14 +130,13 @@
               <thead>
                 <tr>
                   <th>Company</th>
-                  <th>Payment Due Date</th>
+                  <th>Due Date</th>
                   <th>Amount</th>
-                                    
+
                   <th>Payment Method</th>
                   <!-- <th>Agreement</th> -->
                   <th>Cheque No</th>
                   <th>Cheque Due Date</th>
-
 
                   <!-- <th>Clearance Date</th> -->
 
@@ -107,25 +147,22 @@
               </thead>
               <tbody>
                 <tr *ngFor="let paymentItem of payments; let i = index">
-                  <td>{{paymentItem.companyBranchOfc}}</td>
-                  <td>{{paymentItem.paymentDueDate | date:'dd-MMM-y'}}</td>
-                  <td>{{paymentItem.amount}}</td>
+                  <td>{{ paymentItem.companyBranchOfc }}</td>
+                  <td>{{ paymentItem.paymentDueDate | date : "dd-MMM-y" }}</td>
+                  <td>{{ paymentItem.amount }}</td>
                   <td>{{ getPaymentMethodName(paymentItem.paymentMethod) }}</td>
                   <!-- <td>{{paymentItem.agreementDates}}</td> -->
-                  <td>{{paymentItem.chequeNo}}</td>
-                  <td>{{paymentItem.chequeDueDate | date:'dd-MMM-y'}}</td>
-
+                  <td>{{ paymentItem.chequeNo }}</td>
+                  <td>{{ paymentItem.chequeDueDate | date : "dd-MMM-y" }}</td>
 
                   <!-- <td>{{ getPaymentStatusName(paymentItem.paymentStatus)}}</td>
                   <td>{{paymentItem.paymentClearanceDate | date:'dd-MMM-y'}}</td> -->
 
-                  <td>{{paymentItem.senderBankName}}</td>
-                  <td>{{paymentItem.description}}</td>
+                  <td>{{ paymentItem.senderBankName }}</td>
+                  <td>{{ paymentItem.description }}</td>
                   <!-- <td>X</td> -->
                 </tr>
-
               </tbody>
-
             </table>
           </div>
           <!-- /.card-body -->
