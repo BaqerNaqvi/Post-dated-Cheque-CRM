@@ -28,39 +28,31 @@
             </div> -->
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>Start Date:</label>
                             <div class="input-group date" id="startdate" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input" data-target="#startdate"
                                     [(ngModel)]="agreement.startDate" />
-                                <div class="input-group-append" data-target="#startdate" data-toggle="startdate">
+                                <div class="input-group-append" data-target="#startdate" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
-
-                                <!-- <input type="text" class="form-control" placeholder="Title"
-                                            [(ngModel)]="menuItem.title" name="title" #title="ngModel" required>
-                                        <span *ngIf="(title.touched || itemForm.submitted) && title.errors?.required"
-                                            class="text-danger">
-                                            Title is required
-                                        </span> -->
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>End Date:</label>
-                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input"
-                                    data-target="#reservationdate" [(ngModel)]="agreement.endDate" />
-                                <div class="input-group-append" data-target="#reservationdate"
-                                    data-toggle="datetimepicker">
+                            <div class="input-group date" id="endDate" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#endDate"
+                                    [(ngModel)]="agreement.endDate" />
+                                <div class="input-group-append" data-target="#endDate" data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>Company</label>
                             <select id="companyDdl" class="form-control select2bs4" style="width: 100%;"
@@ -70,31 +62,31 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>Branch</label>
                             <input type="text" class="form-control" [(ngModel)]="agreement.branch" />
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>Floor</label>
                             <input type="text" class="form-control" [(ngModel)]="agreement.floor" />
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>Office No.</label>
                             <input type="text" class="form-control" [(ngModel)]="agreement.officeNumber" />
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>Section</label>
                             <input type="text" class="form-control" [(ngModel)]="agreement.section" />
                         </div>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <div class="form-group">
                             <label>Work Station</label>
                             <input type="text" class="form-control" [(ngModel)]="agreement.workStation" />
@@ -124,14 +116,14 @@
 
                 </div>
 
-                <div class="row">
+                <div class="row" *ngFor="let paymentItem of agreementPayments; let i = index">
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Payment Due Date:</label>
-                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                            <div class="input-group date" id="paymentDueDate" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input"
-                                    data-target="#reservationdate" />
-                                <div class="input-group-append" data-target="#reservationdate"
+                                    data-target="#paymentDueDate" [(ngModel)]="paymentItem.paymentDueDate" />
+                                <div class="input-group-append" data-target="#paymentDueDate"
                                     data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -141,50 +133,39 @@
                     <div class="col-sm-1">
                         <div class="form-group">
                             <label>Amount</label>
-                            <input type="text" class="form-control" />
+                            <input type="text" class="form-control" [(ngModel)]="paymentItem.amount" />
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Payment Method</label>
-                            <select class="form-control select2" style="width: 100%;">
-                                <option selected="selected">Alabama</option>
-                                <option>Alaska</option>
-                                <option>California</option>
-                                <option>Delaware</option>
-                                <option>Tennessee</option>
-                                <option>Texas</option>
-                                <option>Washington</option>
-                            </select>
+                            <app-payment-method-select [(selectedPaymentMethod)]="paymentItem.paymentMethod"
+                                (selectedPaymentMethodChange)="onPaymentMethodSelected($event, i)"></app-payment-method-select>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Sender Bank</label>
-                            <select class="form-control select2" style="width: 100%;">
-                                <option selected="selected">Alabama</option>
-                                <option>Alaska</option>
-                                <option>California</option>
-                                <option>Delaware</option>
-                                <option>Tennessee</option>
-                                <option>Texas</option>
-                                <option>Washington</option>
+                            <select id="bankDdl" class="form-control select2bs4" style="width: 100%;"
+                                [(ngModel)]="agreement.companyId" name="bankDdl" required>
+                                <option *ngFor="let category of banks" [value]="category.id">
+                                    {{category.name}}</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-1">
                         <div class="form-group">
                             <label>Cheque No.</label>
-                            <input type="text" class="form-control" />
+                            <input type="text" class="form-control" [(ngModel)]="paymentItem.chequeNo" />
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Cheque Due Date:</label>
-                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                            <div class="input-group date" id="chequeDueDate" data-target-input="nearest">
                                 <input type="text" class="form-control datetimepicker-input"
-                                    data-target="#reservationdate" />
-                                <div class="input-group-append" data-target="#reservationdate"
+                                    data-target="#chequeDueDate" [(ngModel)]="paymentItem.chequeDueDate"/>
+                                <div class="input-group-append" data-target="#chequeDueDate"
                                     data-toggle="datetimepicker">
                                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                 </div>
@@ -194,7 +175,7 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Notes</label>
-                            <input type="text" class="form-control" />
+                            <input type="text" class="form-control" [(ngModel)]="paymentItem.description" />
                         </div>
                     </div>
                 </div>

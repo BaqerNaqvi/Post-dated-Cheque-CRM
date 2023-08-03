@@ -4,6 +4,7 @@ import { AgreementService } from 'src/app/services/agreement.service';
 import { BankService } from 'src/app/services/bank.service';
 import { CompanyService } from 'src/app/services/company.service';
 import { PaymentService } from 'src/app/services/payment.service';
+import { Constants } from 'src/app/shared/constants/app-constants';
 import { PaymentMethodEnum } from 'src/app/shared/enums/payment_method.enum';
 import { PaymentStatusEnum } from 'src/app/shared/enums/payment_status.enum';
 import { Agreement } from 'src/app/shared/models/agreement';
@@ -11,6 +12,7 @@ import { Bank } from 'src/app/shared/models/bank';
 import { Company } from 'src/app/shared/models/company';
 import { Payment } from 'src/app/shared/models/payment';
 declare var $: any;
+declare var moment: any;
 
 @Component({
   selector: 'app-add-agreement',
@@ -33,7 +35,7 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
   }
   companies: Company[] = [];
   banks: Bank[] = [];
-  payments: Payment[] = [];
+  agreementPayments: Payment[] = [];
   agreement: Agreement = new Agreement(0, 0, new Date(), new Date());
 
   constructor(public paymentService: PaymentService, public agreementService: AgreementService, public bankService: BankService, public companyService: CompanyService, private route: ActivatedRoute, private router: Router) {
@@ -57,9 +59,8 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     $('.select2bs4').val('').trigger('change');
   }
 
-  onPaymentMethodSelected(paymentMethodId: number) {
-    this.selectedPaymentMethod = paymentMethodId;
-    this.paymentSearchFilter.paymentMethodId = this.selectedPaymentMethod;
+  onPaymentMethodSelected(paymentMethodId: number, paymentItemIndex: number) {
+    this.agreementPayments[paymentItemIndex].paymentMethod = paymentMethodId;
   }
 
   onMonthSelected(month: any) {
@@ -86,16 +87,33 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     // this.searchPayment();
   }
 
-  searchPayment() {
-    this.paymentService.Search(this.paymentSearchFilter).subscribe((result: any) => {
-      this.payments = result.data.sort((a: Payment, b: Payment) => a.paymentDueDate > b.paymentDueDate ? 1 : -1);
-    });
-  }
+  // searchPayment() {
+  //   this.paymentService.Search(this.paymentSearchFilter).subscribe((result: any) => {
+  //     this.payments = result.data.sort((a: Payment, b: Payment) => a.paymentDueDate > b.paymentDueDate ? 1 : -1);
+  //   });
+  // }
 
   getAgreementById(id: number) {
     this.agreementService.GetById(id).subscribe((result: any) => {
-      this.agreement = result.data;
+      let agrmnt = result.data;
+      agrmnt.startDate = moment(agrmnt.startDate).format(Constants.DATE_FORMAT);
+      agrmnt.endDate = moment(agrmnt.endDate).format(Constants.DATE_FORMAT);
+      this.agreement = agrmnt;
+      this.agreementPayments = result.data.payments.map((x: Payment) => ({
+        ...x,
+        paymentDueDate: moment(x.paymentDueDate).format(Constants.DATE_FORMAT),
+        chequeDueDate: x.chequeDueDate != null ? moment(x.chequeDueDate).format(Constants.DATE_FORMAT) : null,
+        paymentClearanceDate: x.paymentClearanceDate != null ? moment(x.paymentClearanceDate).format(Constants.DATE_FORMAT) : null
+      }));
+
+
+
+      setTimeout(() => {
+        this.jqueryScriptsBinding();
+      }, 100);
     });
+
+
   }
 
   getAllBanks() {
@@ -129,13 +147,11 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
 
     $('#companyDdl').on('select2:select', (e: any) => {
       var data = e.params.data;
-      console.log(data);
       this.paymentSearchFilter.companyId = data.id;
     });
 
     $('#agreementDdl').on('select2:select', (e: any) => {
       var data = e.params.data;
-      console.log(data);
       this.paymentSearchFilter.agreementId = data.id;
     });
 
@@ -143,22 +159,8 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
       var data = e.params.data;
       this.paymentSearchFilter.bankId = data.id;
     });
-    $('#startdate').datetimepicker({
-      format: 'L'
+    $('.date').datetimepicker({
+      format: Constants.DATE_FORMAT
     });
-    // ($("#example1") as any).DataTable({
-    //   "responsive": true, "lengthChange": false, "autoWidth": false,
-    //   "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    // }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-    // ($('#example2') as any).DataTable({
-    //   "paging": true,
-    //   "lengthChange": false,
-    //   "searching": false,
-    //   "ordering": true,
-    //   "info": true,
-    //   "autoWidth": false,
-    //   "responsive": true,
-    // });
   }
 }

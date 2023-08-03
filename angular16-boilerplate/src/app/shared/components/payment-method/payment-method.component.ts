@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 declare var $: any;
 enum PaymentMethodEnum {
   Cheque,
@@ -31,7 +31,7 @@ export class PaymentMethodComponent implements AfterViewInit {
     { id: PaymentMethodEnum.Online, name: 'Online' },
   ];
 
-  selectedPaymentMethod: number;
+  @Input() selectedPaymentMethod: number;
 
   onPaymentMethodChange() {
     this.selectedPaymentMethodChange.emit(this.selectedPaymentMethod);

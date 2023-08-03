@@ -22,6 +22,7 @@ namespace webapicore6.Helper
             .ForMember(e => e.ReceiverBankName, PL => PL.MapFrom(src => src.ReceiverBank != null ? src.ReceiverBank.Name : null));
 
             CreateMap<Agreement, AgreementDto>();
+            CreateMap<Agreement, AgreementListDto>();
             CreateMap<AgreementDto, Agreement>();
 
             CreateMap<Company, CompanyDto>();
