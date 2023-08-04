@@ -1,14 +1,39 @@
-.mt-10{
+.mt-10 {
     margin-top: 35px;
 }
 
-.mr_5{
-    margin-right: 5px;;
+.payment-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
-.mlr-50{
+
+.mr_5 {
+    margin-right: 5px;
+    ;
+}
+
+.mlr-50 {
     margin: 0 50px !important;
 }
 
-.float-right{
+.float-right {
     float: right;
+}
+
+.mtm-10 {
+    margin-top: -10px;
+}
+
+#payment-table tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+#myTable tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+#payment-table{
+    width: 100%;
 }

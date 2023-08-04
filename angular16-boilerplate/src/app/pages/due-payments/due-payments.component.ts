@@ -77,7 +77,7 @@ export class DuePaymentsComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.jqueryScriptsBinding();
-    // this.searchPayment();
+    this.searchPayment();
   }
 
   searchPayment() {

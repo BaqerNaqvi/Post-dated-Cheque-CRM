@@ -14,6 +14,6 @@ namespace webapicore6.Models
         public string? Section { get; set; }
         public string? WorkStation { get; set; }
         public string? Branch { get; set; }
-        public virtual List<PaymentDto> Payments { get; set; }
+        public virtual List<PaymentDto>? Payments { get; set; }
     }
 }

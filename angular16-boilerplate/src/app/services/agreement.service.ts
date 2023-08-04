@@ -39,6 +39,17 @@ export class AgreementService {
     return this.http.get<Agreement[]>(this.baseurl + '/api/agreement');
   }
 
+  // POST
+  Create(data: any): Observable<any> {
+    return this.http.post<any>
+      (
+        this.baseurl + '/api/agreement/add',
+        data,
+        this.httpOptions
+      )
+      .pipe(retry(0), catchError(this.handleError));
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';

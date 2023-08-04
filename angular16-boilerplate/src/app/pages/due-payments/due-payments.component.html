@@ -35,7 +35,7 @@
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
-                  <label for="bankDdl">Sender Bank</label>
+                  <label for="bankDdl">Cheque Bank</label>
                   <select id="bankDdl" class="form-control select2bs4" style="width: 100%;"
                     [(ngModel)]="paymentSearchFilter.bankId" name="bankDdl" required>
                     <option *ngFor="let category of banks" [value]="category.id">
@@ -100,9 +100,9 @@
 
                   <!-- <th>Clearance Date</th> -->
 
-                  <th>Sender Bank</th>
+                  <th>Cheque Bank</th>
                   <th>Notes</th>
-                  <!-- <th></th> -->
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -121,7 +121,9 @@
 
                   <td>{{paymentItem.senderBankName}}</td>
                   <td>{{paymentItem.description}}</td>
-                  <!-- <td>X</td> -->
+                  <td>
+                    <a [routerLink]="['/agreements/'+paymentItem.agreementId]">Edit</a>
+                </td>
                 </tr>
 
               </tbody>

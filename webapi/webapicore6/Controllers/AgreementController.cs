@@ -84,16 +84,17 @@ namespace webapicore6.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [AllowAnonymous]
         [HttpPost("add")]
-        public async Task<IActionResult> Add([FromForm] AgreementDto dto)
+        public async Task<IActionResult> Add(AgreementDto agreementDto)
         {
             try
             {
                 if (ModelState.IsValid)
                 {                    
-                    var data = await _service.AddAgreementAsync(_mapper.Map<Agreement>(dto));
-                    return Ok(new ResponseDto<AgreementDto>(HttpStatusCode.OK, "", dto, null));
+                    var data = await _service.AddAgreementAsync(_mapper.Map<Agreement>(agreementDto));
+                    return Ok(new ResponseDto<AgreementDto>(HttpStatusCode.OK, "", agreementDto, null));
                 }
                 else
                 {

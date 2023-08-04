@@ -12,6 +12,7 @@ const routes: Routes = [
   },
   { path: "due-payments", component: DuePaymentsComponent },
   { path: "agreements", component: AgreementComponent },
+  { path: "agreements/add", component: AddAgreementComponent },
   { path: "agreements/:id", component: AddAgreementComponent }
 ];
 

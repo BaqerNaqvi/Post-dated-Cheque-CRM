@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AgreementService } from 'src/app/services/agreement.service';
 import { BankService } from 'src/app/services/bank.service';
@@ -36,10 +37,32 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
   companies: Company[] = [];
   banks: Bank[] = [];
   agreementPayments: Payment[] = [];
-  agreement: Agreement = new Agreement(0, 0, new Date(), new Date());
+  agreement: Agreement = new Agreement(0, 0, moment(new Date()).format(Constants.DATE_FORMAT), moment(new Date()).format(Constants.DATE_FORMAT));
 
-  constructor(public paymentService: PaymentService, public agreementService: AgreementService, public bankService: BankService, public companyService: CompanyService, private route: ActivatedRoute, private router: Router) {
+  constructor(public paymentService: PaymentService,
+    public agreementService: AgreementService,
+    public bankService: BankService,
+    public companyService: CompanyService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private _location: Location) {
 
+  }
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      const id = params['id'];
+      if (parseInt(id) > 0) {
+        this.getAgreementById(id);
+      }
+    });
+    this.getAllBanks();
+    this.getAllCompannies();
+  }
+
+  ngAfterViewInit(): void {
+    this.jqueryScriptsBinding();
+    // this.searchPayment();
   }
 
   clearSearchFilters() {
@@ -71,20 +94,16 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
 
   paymentStatusOptions = Object.values(PaymentStatusEnum).map(value => ({ name: PaymentStatusEnum[value as number], value }));
 
-  ngOnInit(): void {
-    this.route.params.subscribe((params: Params) => {
-      const id = params['id'];
-      if (parseInt(id) > 0) {
-        this.getAgreementById(id);
-      }
-    });
-    this.getAllBanks();
-    this.getAllCompannies();
+  insertNewPayment() {
+    this.agreementPayments.push(new Payment(0, 0, 0, moment(new Date()).format(Constants.DATE_FORMAT), 0, 0));
+
+    // setTimeout(() => {
+    //   this.jqueryScriptsBinding();
+    // }, 100);
   }
 
-  ngAfterViewInit(): void {
-    this.jqueryScriptsBinding();
-    // this.searchPayment();
+  removePaymentRow(indexToRemove: number) {
+    this.agreementPayments.splice(indexToRemove, 1);
   }
 
   // searchPayment() {
@@ -105,17 +124,32 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
         chequeDueDate: x.chequeDueDate != null ? moment(x.chequeDueDate).format(Constants.DATE_FORMAT) : null,
         paymentClearanceDate: x.paymentClearanceDate != null ? moment(x.paymentClearanceDate).format(Constants.DATE_FORMAT) : null
       }));
-
-
-
-      setTimeout(() => {
-        this.jqueryScriptsBinding();
-      }, 100);
+      // setTimeout(() => {
+      //   this.jqueryScriptsBinding();
+      // }, 100);
     });
 
 
   }
 
+  submitAgreement() {
+    let payload = {
+      "agreementDto": {
+        ...this.agreement,
+        "payments": this.agreementPayments
+      }
+    }
+    console.log("submitted data:", payload)
+    // this.agreementService.Create(payload).subscribe(
+    //   {
+    //     next: (result: any) => {
+    //       this.router.navigate(['agreements']);
+    //     },
+    //     error: (e) => console.error(e),
+    //     complete: () => console.info('complete')
+    //   }
+    // );
+  }
   getAllBanks() {
     this.bankService.GetAll().subscribe((result: any) => {
       this.banks = result.data.sort((a: Bank, b: Bank) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
@@ -139,6 +173,9 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     return PaymentStatusEnum[value];
   }
 
+  backClicked() {
+    this._location.back();
+  }
   jqueryScriptsBinding() {
     $('.select2bs4').select2({
       theme: 'bootstrap4',
@@ -147,20 +184,18 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
 
     $('#companyDdl').on('select2:select', (e: any) => {
       var data = e.params.data;
-      this.paymentSearchFilter.companyId = data.id;
+      this.selectedCompanyId = data.id;
+      this.agreement.companyId = data.id;
     });
 
-    $('#agreementDdl').on('select2:select', (e: any) => {
-      var data = e.params.data;
-      this.paymentSearchFilter.agreementId = data.id;
-    });
-
-    $('#bankDdl').on('select2:select', (e: any) => {
-      var data = e.params.data;
-      this.paymentSearchFilter.bankId = data.id;
-    });
     $('.date').datetimepicker({
       format: Constants.DATE_FORMAT
     });
+
+    $("#startDate").on("change.datetimepicker", ({date, oldDate}) => {
+      console.log("New date", date);
+      console.log("Old date", oldDate);
+      alert("Changed date")
+})
   }
 }

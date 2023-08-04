@@ -1,4 +1,5 @@
 import { AfterViewInit, Component } from '@angular/core';
+
 import { AgreementService } from 'src/app/services/agreement.service';
 import { BankService } from 'src/app/services/bank.service';
 import { CompanyService } from 'src/app/services/company.service';
@@ -35,7 +36,11 @@ export class AgreementComponent implements AfterViewInit {
   payments: Payment[] = [];
   agreements: Agreement[] = [];
 
-  constructor(public paymentService: PaymentService, public agreementService: AgreementService, public bankService: BankService, public companyService: CompanyService) {
+  constructor(
+    public paymentService: PaymentService,
+    public agreementService: AgreementService,
+    public bankService: BankService,
+    public companyService: CompanyService) {
 
   }
 
@@ -72,6 +77,7 @@ export class AgreementComponent implements AfterViewInit {
   ngOnInit(): void {
     this.getAllBanks();
     this.getAllCompannies();
+    this.getAllAgreements();
   }
 
   ngAfterViewInit(): void {
@@ -123,6 +129,7 @@ export class AgreementComponent implements AfterViewInit {
   getPaymentStatusName(value: number): string {
     return PaymentStatusEnum[value];
   }
+
 
   jqueryScriptsBinding() {
     $('.select2bs4').select2({

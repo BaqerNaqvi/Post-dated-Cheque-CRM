@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 declare var $: any;
 enum PaymentMethodEnum {
   Cheque,
@@ -15,12 +15,13 @@ interface PaymentMethod   {
 @Component({
   selector: 'app-payment-method-select',
   template: `
-    <select [(ngModel)]="selectedPaymentMethod" (change)="onPaymentMethodChange()" id="paymentMethodDdl" class="form-control select2bs4" style="width: 100%;">
+    <select  #paymentMethodDdl [(ngModel)]="selectedPaymentMethod" (change)="onPaymentMethodChange()" class="form-control select2bs4" style="width: 100%;">
       <option *ngFor="let method of paymentMethods" [value]="method.id">{{ method.name }}</option>
     </select>
   `,
 })
 export class PaymentMethodComponent implements AfterViewInit {
+  @ViewChild('paymentMethodDdl') paymentMethodDdl: ElementRef;
   @Output() selectedPaymentMethodChange = new EventEmitter<number>();
 
   paymentMethods: PaymentMethod[] = [
@@ -38,7 +39,7 @@ export class PaymentMethodComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    $('#paymentMethodDdl').on('select2:select', (e: any) => {
+    $(this.paymentMethodDdl.nativeElement).on('select2:select', (e: any) => {
       var data = e.params.data;
       this.selectedPaymentMethodChange.emit(data.id);
     });
