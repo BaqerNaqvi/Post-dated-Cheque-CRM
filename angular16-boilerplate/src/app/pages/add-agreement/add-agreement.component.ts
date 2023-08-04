@@ -64,7 +64,7 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     this.getAllCompannies();
     setTimeout(() => {
       this.jqueryScriptsBinding();
-    }, 1000);
+    }, 200);
   }
 
   ngAfterViewInit() {
@@ -73,6 +73,10 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
 
   onPaymentMethodSelected(paymentMethodId: number, paymentItemIndex: number) {
     this.agreementPayments[paymentItemIndex].paymentMethod = paymentMethodId;
+  }
+
+  onPaymentMethodStatus(paymentStatusId: number, paymentItemIndex: number) {
+    this.agreementPayments[paymentItemIndex].paymentStatus = paymentStatusId;
   }
 
   insertNewPayment() {

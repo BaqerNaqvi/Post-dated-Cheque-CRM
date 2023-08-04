@@ -73,10 +73,11 @@
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="agreementDdl">Branch</label>
-                  <input type="text" id="branchTxt" class="form-control" [(ngModel)]="paymentSearchFilter.branch" name="branchTxt" required/>
+                  <input type="text" id="branchTxt" class="form-control" [(ngModel)]="paymentSearchFilter.branch"
+                    name="branchTxt" required />
                 </div>
               </div>
-              
+
             </div>
           </div>
         </div>
@@ -91,13 +92,13 @@
                   <th>Company</th>
                   <th>Payment Due Date</th>
                   <th>Amount</th>
-                                    
+
                   <th>Payment Method</th>
                   <!-- <th>Agreement</th> -->
                   <th>Cheque No</th>
                   <th>Cheque Due Date</th>
 
-
+                  <th>Status</th>
                   <!-- <th>Clearance Date</th> -->
 
                   <th>Cheque Bank</th>
@@ -116,14 +117,14 @@
                   <td>{{paymentItem.chequeDueDate | date:'dd-MMM-y'}}</td>
 
 
-                  <!-- <td>{{ getPaymentStatusName(paymentItem.paymentStatus)}}</td>
-                  <td>{{paymentItem.paymentClearanceDate | date:'dd-MMM-y'}}</td> -->
+                  <td>{{ getPaymentStatusName(paymentItem.paymentStatus)}}</td>
+                  <!-- <td>{{paymentItem.paymentClearanceDate | date:'dd-MMM-y'}}</td> -->
 
                   <td>{{paymentItem.senderBankName}}</td>
                   <td>{{paymentItem.description}}</td>
                   <td>
                     <a [routerLink]="['/agreements/'+paymentItem.agreementId]">Edit</a>
-                </td>
+                  </td>
                 </tr>
 
               </tbody>

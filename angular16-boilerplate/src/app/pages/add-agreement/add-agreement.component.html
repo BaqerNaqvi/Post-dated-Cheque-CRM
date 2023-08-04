@@ -144,7 +144,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-1" *ngIf="paymentItem.paymentMethod == 0">
+                            <div class="col-sm-1">
                                 <div class="form-group">
 
                                 </div>
@@ -174,10 +174,13 @@
                                     </select>
                                 </div>
                             </div>
-
-
-
-
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Payment Status</label>
+                                    <app-payment-status-select [(selectedPaymentStatus)]="paymentItem.paymentStatus"
+                                        (selectedPaymentStatusChange)="onPaymentMethodStatus($event, i)"></app-payment-status-select>
+                                </div>
+                            </div>
                         </div>
                     </tr>
                 </table>

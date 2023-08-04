@@ -1,5 +1,4 @@
 export enum PaymentStatusEnum {
-    All,
     Pending,
     Paid,
     Late,

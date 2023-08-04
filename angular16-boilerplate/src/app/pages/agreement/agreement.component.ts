@@ -78,10 +78,13 @@ export class AgreementComponent implements AfterViewInit {
     this.getAllBanks();
     this.getAllCompannies();
     this.getAllAgreements();
+    setTimeout(() => {
+      this.jqueryScriptsBinding();
+    }, 200);
   }
 
   ngAfterViewInit(): void {
-    this.jqueryScriptsBinding();
+    // this.jqueryScriptsBinding();
     // this.searchPayment();
   }
 

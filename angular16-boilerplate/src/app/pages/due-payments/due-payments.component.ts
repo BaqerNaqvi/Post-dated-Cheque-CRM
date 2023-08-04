@@ -41,9 +41,9 @@ export class DuePaymentsComponent implements AfterViewInit {
   }
 
   clearSearchFilters() {
-    this.selectedCompanyId;
-    this.selectedMonth;
-    this.selectedPaymentMethod;
+    this.selectedCompanyId = null;
+    this.selectedMonth = null;
+    this.selectedPaymentMethod = null;
 
 
     this.paymentSearchFilter.agreementId = null;
@@ -71,12 +71,17 @@ export class DuePaymentsComponent implements AfterViewInit {
   paymentStatusOptions = Object.values(PaymentStatusEnum).map(value => ({ name: PaymentStatusEnum[value as number], value }));
 
   ngOnInit(): void {
+
     this.getAllBanks();
     this.getAllCompannies();
+    setTimeout(() => {
+      this.jqueryScriptsBinding();
+      this.clearSearchFilters();
+    }, 200);
   }
 
   ngAfterViewInit(): void {
-    this.jqueryScriptsBinding();
+    // this.jqueryScriptsBinding();
     this.searchPayment();
   }
 
@@ -125,9 +130,8 @@ export class DuePaymentsComponent implements AfterViewInit {
 
     $('#companyDdl').on('select2:select', (e: any) => {
       var data = e.params.data;
-      console.log(data);
       this.paymentSearchFilter.companyId = data.id;
-      this.getAgreementByCompanyId();
+      // this.getAgreementByCompanyId();
     });
 
     $('#agreementDdl').on('select2:select', (e: any) => {
