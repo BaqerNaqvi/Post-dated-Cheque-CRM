@@ -1,11 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { PaymentMethodEnum } from '../../enums/payment_method.enum';
 declare var $: any;
-// enum PaymentMethodEnum {
-//   Cheque,
-//   Cash,
-//   Advanced,
-//   Online,
-// }
 
 interface PaymentMethod {
   id: number;
@@ -25,10 +20,9 @@ export class PaymentMethodComponent implements AfterViewInit {
   @Output() selectedPaymentMethodChange = new EventEmitter<number>();
 
   paymentMethods: PaymentMethod[] = [
-    // { id: PaymentMethodEnum.All, name: 'All' },
     { id: PaymentMethodEnum.Cheque, name: 'Cheque' },
     { id: PaymentMethodEnum.Cash, name: 'Cash' },
-    // { id: PaymentMethodEnum.Advanced, name: 'Advanced' },
+    { id: PaymentMethodEnum.Advanced, name: 'Advanced' },
     { id: PaymentMethodEnum.Online, name: 'Online' },
   ];
 
