@@ -12,7 +12,9 @@ import { PaymentMethodComponent } from './shared/components/payment-method/payme
 import { TopNavComponent } from './shared/components/top-nav/top-nav.component';
 import { AgreementComponent } from './pages/agreement/agreement.component';
 import { AddAgreementComponent } from './pages/add-agreement/add-agreement.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { InitializeSelect2Directive } from './shared/directives/initialize-select2.directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,13 +24,16 @@ import { AddAgreementComponent } from './pages/add-agreement/add-agreement.compo
     PaymentMethodComponent,
     TopNavComponent,
     AgreementComponent,
-    AddAgreementComponent
+    AddAgreementComponent,
+    InitializeSelect2Directive
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    BsDatepickerModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

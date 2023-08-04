@@ -44,7 +44,7 @@ export class AgreementService {
     return this.http.post<any>
       (
         this.baseurl + '/api/agreement/add',
-        data,
+        JSON.stringify(data),
         this.httpOptions
       )
       .pipe(retry(0), catchError(this.handleError));

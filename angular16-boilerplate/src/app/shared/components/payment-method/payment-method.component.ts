@@ -7,7 +7,7 @@ enum PaymentMethodEnum {
   Online,
 }
 
-interface PaymentMethod   {
+interface PaymentMethod {
   id: number;
   name: string;
 }
@@ -39,6 +39,7 @@ export class PaymentMethodComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.paymentMethods = this.paymentMethods.sort((a: PaymentMethod, b: PaymentMethod) => a.name > b.name ? 1 : -1)
     $(this.paymentMethodDdl.nativeElement).on('select2:select', (e: any) => {
       var data = e.params.data;
       this.selectedPaymentMethodChange.emit(data.id);

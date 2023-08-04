@@ -23,8 +23,7 @@ export class Payment {
         paymentMethod: number,
         paymentDueDate: Date,
         paymentStatus: number,
-        amount: number,
-        senderBankId:number=0
+        amount: number
     ) {
         this.id = id;
         this.agreementId = agreementId;
@@ -32,6 +31,5 @@ export class Payment {
         this.paymentDueDate = paymentDueDate;
         this.paymentStatus = paymentStatus;
         this.amount = amount;
-        this.senderBankId = senderBankId;
     }
 }

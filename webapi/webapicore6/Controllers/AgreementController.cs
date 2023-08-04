@@ -92,8 +92,16 @@ namespace webapicore6.Controllers
             try
             {
                 if (ModelState.IsValid)
-                {                    
-                    var data = await _service.AddAgreementAsync(_mapper.Map<Agreement>(agreementDto));
+                {
+                    var data = new Object();
+                    if (agreementDto.Id > 0)
+                    {
+                        data = await _service.UpdateAgreementAsync(_mapper.Map<Agreement>(agreementDto));
+                    }
+                    else
+                    {
+                        data = await _service.AddAgreementAsync(_mapper.Map<Agreement>(agreementDto));
+                    }
                     return Ok(new ResponseDto<AgreementDto>(HttpStatusCode.OK, "", agreementDto, null));
                 }
                 else

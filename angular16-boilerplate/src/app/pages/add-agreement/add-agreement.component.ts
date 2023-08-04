@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChildren, ElementRef, QueryList, ViewChild, NgZone, Injector, ApplicationRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AgreementService } from 'src/app/services/agreement.service';
@@ -6,6 +6,7 @@ import { BankService } from 'src/app/services/bank.service';
 import { CompanyService } from 'src/app/services/company.service';
 import { PaymentService } from 'src/app/services/payment.service';
 import { Constants } from 'src/app/shared/constants/app-constants';
+import { InitializeSelect2Directive } from 'src/app/shared/directives/initialize-select2.directive';
 import { PaymentMethodEnum } from 'src/app/shared/enums/payment_method.enum';
 import { PaymentStatusEnum } from 'src/app/shared/enums/payment_status.enum';
 import { Agreement } from 'src/app/shared/models/agreement';
@@ -38,6 +39,7 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
   banks: Bank[] = [];
   agreementPayments: Payment[] = [];
   agreement: Agreement = new Agreement(0, 0, moment(new Date()).format(Constants.DATE_FORMAT), moment(new Date()).format(Constants.DATE_FORMAT));
+  @ViewChild('dynamicDropdownContainer', { read: ElementRef }) dynamicDropdownContainer!: ElementRef;
 
   constructor(public paymentService: PaymentService,
     public agreementService: AgreementService,
@@ -45,7 +47,9 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     public companyService: CompanyService,
     private route: ActivatedRoute,
     private router: Router,
-    private _location: Location) {
+    private _location: Location,
+    private injector: Injector,
+    private appRef: ApplicationRef,) {
 
   }
 
@@ -58,59 +62,33 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     });
     this.getAllBanks();
     this.getAllCompannies();
+    setTimeout(() => {
+      this.jqueryScriptsBinding();
+    }, 1000);
   }
 
-  ngAfterViewInit(): void {
-    this.jqueryScriptsBinding();
-    // this.searchPayment();
-  }
-
-  clearSearchFilters() {
-    this.selectedCompanyId;
-    this.selectedMonth;
-    this.selectedPaymentMethod;
-
-
-    this.paymentSearchFilter.agreementId = null;
-    this.paymentSearchFilter.companyId = null;
-    this.paymentSearchFilter.bankId = null;
-    this.paymentSearchFilter.month = null;
-    this.paymentSearchFilter.year = null;
-    this.paymentSearchFilter.paymentMethodId = null;
-    this.paymentSearchFilter.branch = null;
-
-    $('.select2bs4').val('').trigger('change');
+  ngAfterViewInit() {
+    // this.jqueryScriptsBinding();
   }
 
   onPaymentMethodSelected(paymentMethodId: number, paymentItemIndex: number) {
     this.agreementPayments[paymentItemIndex].paymentMethod = paymentMethodId;
   }
 
-  onMonthSelected(month: any) {
-    this.selectedMonth = month;
-    this.paymentSearchFilter.month = month.split('-')[0];
-    this.paymentSearchFilter.year = month.split('-')[1];
-  }
-
-  paymentStatusOptions = Object.values(PaymentStatusEnum).map(value => ({ name: PaymentStatusEnum[value as number], value }));
-
   insertNewPayment() {
     this.agreementPayments.push(new Payment(0, 0, 0, moment(new Date()).format(Constants.DATE_FORMAT), 0, 0));
 
     // setTimeout(() => {
-    //   this.jqueryScriptsBinding();
+    //   $('.select2bs4').select2({
+    //     theme: 'bootstrap4',
+    //     placeholder: "Select an Option"
+    //   });
     // }, 100);
   }
 
   removePaymentRow(indexToRemove: number) {
     this.agreementPayments.splice(indexToRemove, 1);
   }
-
-  // searchPayment() {
-  //   this.paymentService.Search(this.paymentSearchFilter).subscribe((result: any) => {
-  //     this.payments = result.data.sort((a: Payment, b: Payment) => a.paymentDueDate > b.paymentDueDate ? 1 : -1);
-  //   });
-  // }
 
   getAgreementById(id: number) {
     this.agreementService.GetById(id).subscribe((result: any) => {
@@ -124,31 +102,34 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
         chequeDueDate: x.chequeDueDate != null ? moment(x.chequeDueDate).format(Constants.DATE_FORMAT) : null,
         paymentClearanceDate: x.paymentClearanceDate != null ? moment(x.paymentClearanceDate).format(Constants.DATE_FORMAT) : null
       }));
-      // setTimeout(() => {
-      //   this.jqueryScriptsBinding();
-      // }, 100);
     });
 
 
   }
 
   submitAgreement() {
-    let payload = {
-      "agreementDto": {
-        ...this.agreement,
-        "payments": this.agreementPayments
+    this.agreement.startDate = moment(this.agreement.startDate, Constants.DATE_FORMAT).format('YYYY-MM-DD');
+    this.agreement.endDate = moment(this.agreement.endDate, Constants.DATE_FORMAT).format('YYYY-MM-DD');
+    this.agreementPayments = this.agreementPayments.map((x: Payment) => ({
+      ...x,
+      agreementId: this.agreement.id,
+      paymentDueDate: moment(x.paymentDueDate, Constants.DATE_FORMAT).format('YYYY-MM-DD'),
+      chequeDueDate: x.chequeDueDate != null ? moment(x.chequeDueDate, Constants.DATE_FORMAT).format('YYYY-MM-DD') : null,
+      paymentClearanceDate: x.paymentClearanceDate != null ? moment(x.paymentClearanceDate, Constants.DATE_FORMAT).format('YYYY-MM-DD') : null
+    }));
+
+    this.agreementService.Create({
+      ...this.agreement,
+      "payments": this.agreementPayments
+    }).subscribe(
+      {
+        next: (result: any) => {
+          this.router.navigate(['agreements']);
+        },
+        error: (e) => console.error(e),
+        complete: () => console.info('complete')
       }
-    }
-    console.log("submitted data:", payload)
-    // this.agreementService.Create(payload).subscribe(
-    //   {
-    //     next: (result: any) => {
-    //       this.router.navigate(['agreements']);
-    //     },
-    //     error: (e) => console.error(e),
-    //     complete: () => console.info('complete')
-    //   }
-    // );
+    );
   }
   getAllBanks() {
     this.bankService.GetAll().subscribe((result: any) => {
@@ -165,37 +146,53 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     // Add "All" option to the array
     // this.companies.push({ id: 0, name: 'All' });
   }
-
-  getPaymentMethodName(value: number): string {
-    return PaymentMethodEnum[value];
+  onCompanySelect(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.agreement.companyId = parseInt(target.value, 10);
   }
-  getPaymentStatusName(value: number): string {
-    return PaymentStatusEnum[value];
-  }
-
   backClicked() {
     this._location.back();
   }
   jqueryScriptsBinding() {
-    $('.select2bs4').select2({
+    // $('.select2bs4').select2({
+    //   theme: 'bootstrap4',
+    //   placeholder: "Select an Option"
+    // });
+
+    $('#companyDdl').select2({
       theme: 'bootstrap4',
       placeholder: "Select an Option"
-    });
-
-    $('#companyDdl').on('select2:select', (e: any) => {
-      var data = e.params.data;
+    }).on('select2:select', (e: any) => {
+      const data = e.params.data;
       this.selectedCompanyId = data.id;
       this.agreement.companyId = data.id;
+      // Manually trigger Angular change detection to update the model property
+      // this.detectChanges();
     });
 
-    $('.date').datetimepicker({
-      format: Constants.DATE_FORMAT
+    $(this.dynamicDropdownContainer.nativeElement).on('select2:select', (e: any) => {
+      const data = e.params.data;
+      const selectedIndex = e.target.getAttribute('data-index');
+      if (selectedIndex !== null) {
+        const index = parseInt(selectedIndex, 10);
+        this.agreementPayments[index].senderBankId = data.id;
+        console.log('Selected value:', data.id, ' for index:', index);
+      }
     });
+  }
 
-    $("#startDate").on("change.datetimepicker", ({date, oldDate}) => {
-      console.log("New date", date);
-      console.log("Old date", oldDate);
-      alert("Changed date")
-})
+  private detectChanges(): void {
+    try {
+      // Use the 'ApplicationRef' and 'NgZone' to trigger change detection
+      // This is a workaround as ChangeDetectorRef.detectChanges() may not always work with select2
+      const appRef = this.injector.get(ApplicationRef);
+      const zone: NgZone = this.injector.get(NgZone);
+
+      zone.run(() => {
+        appRef.tick();
+      });
+    } catch (e) {
+      console.error('Error while triggering change detection:', e);
+    }
   }
 }

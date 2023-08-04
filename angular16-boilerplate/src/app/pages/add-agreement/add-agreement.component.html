@@ -14,49 +14,30 @@
 <div class="content">
     <div class="container-fluid">
         <div class="card card-default">
-            <!-- <div class="card-header">
-              <h3 class="card-title">Agreement</h3>
-  
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </div> -->
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Start Date:</label>
-                            <div class="input-group date" id="startdate" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#startdate"
-                                    [(ngModel)]="agreement.startDate" />
-                                <div class="input-group-append" data-target="#startdate" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
+                            <input type="text" placeholder="Start Date" class="form-control"
+                                [(ngModel)]="agreement.startDate" bsDatepicker
+                                [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>End Date:</label>
-                            <div class="input-group date" id="endDate" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#endDate"
-                                    [(ngModel)]="agreement.endDate" />
-                                <div class="input-group-append" data-target="#endDate" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
+                            <input type="text" placeholder="End Date" class="form-control"
+                                [(ngModel)]="agreement.endDate" bsDatepicker
+                                [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }">
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Company</label>
                             <select id="companyDdl" class="form-control select2bs4" style="width: 100%;"
-                                [(ngModel)]="agreement.companyId" name="companyDdl" required>
+                                [(ngModel)]="agreement.companyId" name="companyDdl" required  #companyDdl="ngModel"
+                                (change)="onCompanySelect($event)">
                                 <option *ngFor="let category of companies" [value]="category.id">
                                     {{category.name}}</option>
                             </select>
@@ -104,14 +85,14 @@
         <div class="card card-default">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <h4>Payments Schedule</h4>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="form-group">
-                            <button type="button" class="btn btn-outline-primary btn-block"
+                            <button type="button" class="btn btn-block btn-outline-success"
                                 (click)="insertNewPayment()">
                                 <i class="fas fa-plus"></i>
                                 Insert New Payment
@@ -122,7 +103,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <table id="payment-table">
+                <table id="payment-table" #dynamicDropdownContainer>
                     <tr *ngFor="let paymentItem of agreementPayments; let i = index">
                         <div class="row payment-row">
                             <div class="col-sm-1">
@@ -138,21 +119,15 @@
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <label>Payment Due Date:</label>
-                                    <div class="input-group date" id="paymentDueDate{{i}}" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input"
-                                            [attr.data-target]="'#paymentDueDate' + i"
-                                            [(ngModel)]="paymentItem.paymentDueDate" />
-                                        <div class="input-group-append" [attr.data-target]="'#paymentDueDate' + i"
-                                            data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                    </div>
+                                    <input type="text" placeholder="Payment Due Date" class="form-control"
+                                        [(ngModel)]="paymentItem.paymentDueDate" bsDatepicker
+                                        [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }">
                                 </div>
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
                                     <label>Amount</label>
-                                    <input type="text" class="form-control" [(ngModel)]="paymentItem.amount" />
+                                    <input type="number" class="form-control" [(ngModel)]="paymentItem.amount" />
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -177,15 +152,9 @@
                             <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
                                 <div class="form-group">
                                     <label>Cheque Due Date:</label>
-                                    <div class="input-group date" id="chequeDueDate{{i}}" data-target-input="nearest">
-                                        <input type="text" class="form-control datetimepicker-input"
-                                            [attr.data-target]="'#chequeDueDate' + i"
-                                            [(ngModel)]="paymentItem.chequeDueDate" />
-                                        <div class="input-group-append" [attr.data-target]="'#chequeDueDate' + i"
-                                            data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                    </div>
+                                    <input type="text" placeholder="Cheque Due Date" class="form-control"
+                                        [(ngModel)]="paymentItem.chequeDueDate" bsDatepicker
+                                        [bsConfig]="{ adaptivePosition: true, dateInputFormat: 'DD-MM-YYYY' }">
                                 </div>
                             </div>
                             <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
@@ -198,9 +167,10 @@
                                 <div class="form-group">
                                     <label>Cheque Bank</label>
                                     <select class="form-control select2bs4" style="width: 100%;"
-                                        [(ngModel)]="agreement.companyId" required>
-                                        <option *ngFor="let category of banks" [value]="category.id">
-                                            {{category.name}}</option>
+                                        [(ngModel)]="paymentItem.senderBankId" required initializeSelect2
+                                        [attr.data-index]="i">
+                                        <option *ngFor="let bank of banks" [value]="bank.id">
+                                            {{bank.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -217,7 +187,7 @@
 
             <div class="card-footer">
                 <button class="btn btn-default mr_5" (click)="backClicked()">Cancel</button>
-                <button class="btn btn-primary float-right" (click)="submitAgreement()">Save</button>
+                <button class="btn btn-success float-right" (click)="submitAgreement()">Save</button>
             </div>
         </div>
     </div>
