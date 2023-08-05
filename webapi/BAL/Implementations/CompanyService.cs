@@ -66,5 +66,10 @@ namespace BAL.Implementation
                 throw e;
             }
         }
+
+        public async Task<List<Company>> GetByFilters(CompanyFilters filters)
+        {
+            return await _repo.GetByFiltersAsync(filters);
+        }
     }
 }

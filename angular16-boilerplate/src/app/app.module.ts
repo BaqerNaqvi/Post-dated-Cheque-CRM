@@ -15,6 +15,8 @@ import { AddAgreementComponent } from './pages/add-agreement/add-agreement.compo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { InitializeSelect2Directive } from './shared/directives/initialize-select2.directive';
+import { CompaniesListComponent } from './pages/company/companies-list/companies-list.component';
+import { AddCompanyComponent } from './pages/company/add-company/add-company.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +27,9 @@ import { InitializeSelect2Directive } from './shared/directives/initialize-selec
     TopNavComponent,
     AgreementComponent,
     AddAgreementComponent,
-    InitializeSelect2Directive
+    InitializeSelect2Directive,
+    CompaniesListComponent,
+    AddCompanyComponent
   ],
   imports: [
     BrowserModule,

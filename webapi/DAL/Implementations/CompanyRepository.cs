@@ -18,5 +18,14 @@ namespace DAL.Implementations
             _context = context;
 
         }
+
+        public async Task<List<Company>> GetByFiltersAsync(CompanyFilters filters)
+        {
+            IQueryable<Company> query = _context.Companies.Where(f =>
+                   (filters.name == null || f.Name.Contains(filters.name))
+            ).OrderBy(x => x.Name).AsQueryable();
+
+            return await PagedList<Company>.CreateAsync(query, filters.PageNumber, filters.PageSize);
+        }
     }
 }

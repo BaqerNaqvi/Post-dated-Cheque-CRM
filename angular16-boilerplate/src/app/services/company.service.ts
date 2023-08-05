@@ -23,7 +23,29 @@ export class CompanyService {
     return this.http.get<Company[]>(this.baseurl + '/api/company');
   }
 
+  GetById(id: number) {
+    return this.http.get<Company[]>(this.baseurl + '/api/company/' + id);
+  }
 
+  // POST
+  Create(data: any): Observable<any> {
+    console.log("company-payload:", data);
+    return this.http.post<any>
+      (
+        this.baseurl + '/api/company/add',
+        JSON.stringify(data),
+        this.httpOptions
+      )
+      .pipe(retry(0), catchError(this.handleError));
+  }
+
+  // POST
+  Search(filters: any): Observable<[Company]> {
+    return this.http.post<[Company]>(
+      this.baseurl + '/api/company/search',
+      filters
+    ).pipe(retry(1), catchError(this.handleError));
+  }
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {

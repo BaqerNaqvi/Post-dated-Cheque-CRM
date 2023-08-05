@@ -39,11 +39,26 @@ namespace webapicore6.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPost("search")]
+        public async Task<IActionResult> Search(CompanyFilters filters)
+        {
+            try
+            {
+                var results = await _service.GetByFilters(filters);
+                return Ok(new ResponseDto<List<CompanyDto>>(HttpStatusCode.OK, "", _mapper.Map<List<CompanyDto>>(results)));
+            }
+            catch (Exception e)
+            {
+                return Ok(new ResponseDto<List<CompanyDto>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
+            }
+        }
+
         //[Authorize(AuthenticationSchemes = "Bearer")]
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBankById(int id)
+        public async Task<IActionResult> GetxById(int id)
         {
             try
             {
@@ -55,33 +70,24 @@ namespace webapicore6.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [AllowAnonymous]
         [HttpPost("add")]
-        public async Task<IActionResult> Add([FromForm] CompanyDto dto)
+        public async Task<IActionResult> Add(CompanyDto dto)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    // Handle the file upload
-                    //if (dto.MenuImage != null && dto.MenuImage.Length > 0)
-                    //{
-                    //    string fileName = Guid.NewGuid().ToString() + "_" + dto.MenuImage.FileName;
-                    //    string filePath = Path.Combine("wwwroot/images/", fileName);
-
-                    //    using (var stream = new FileStream(filePath, FileMode.Create))
-                    //    {
-                    //        await dto.MenuImage.CopyToAsync(stream);
-                    //    }
-
-                    //    // Update the DTO with the file path
-                    //    dto.ImageUrl = fileName;
-                    //}
-                    //var model = _mapper.Map<Payment>(dto);
-                    //model.RecCreatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    //model.RecUpdatedBy = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                    var data = await _service.AddAsync(_mapper.Map<Company>(dto));
+                    var data = new Object();
+                    if (dto.Id > 0)
+                    {
+                        data = await _service.UpdateAsync(_mapper.Map<Company>(dto));
+                    }
+                    else
+                    {
+                        data = await _service.AddAsync(_mapper.Map<Company>(dto));
+                    }
                     return Ok(new ResponseDto<CompanyDto>(HttpStatusCode.OK, "", dto, null));
                 }
                 else
@@ -97,9 +103,10 @@ namespace webapicore6.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [AllowAnonymous]
         [HttpPost("update")]
-        public async Task<IActionResult> Update([FromForm] CompanyDto dto)
+        public async Task<IActionResult> Update(CompanyDto dto)
         {
             try
             {

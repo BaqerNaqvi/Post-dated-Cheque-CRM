@@ -30,4 +30,9 @@
     {
         public int? companyId { get; set; }
     }
+
+    public class CompanyFilters : PagingParams
+    {
+        public string? name { get; set; }
+    }
 }
