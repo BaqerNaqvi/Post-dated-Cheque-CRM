@@ -2,13 +2,24 @@
 <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
   <div class="container-fluid">
     <a href="/" class="navbar-brand">
-      <img src="assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-        style="opacity: .8">
-      <span class="brand-text font-weight-light">CRM</span>
+      <img
+        src="assets/images/arafat.jpg"
+        alt="PDC Management System"
+        class="brand-image img-circle elevation-3"
+        style="height: 50px; margin-right: 12px"
+      />
+      <span class="brand-text font-weight-light">PDC Portal</span>
     </a>
 
-    <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler order-1"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarCollapse"
+      aria-controls="navbarCollapse"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -16,13 +27,20 @@
       <!-- Left navbar links -->
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a [routerLink]="['/']" class="nav-link">Home</a>
+          <a
+            [routerLink]="['due-payments']"
+            class="nav-link"
+            routerLinkActive="active"
+            >Due Payments</a
+          >
         </li>
         <li class="nav-item">
-          <a [routerLink]="['due-payments']" class="nav-link" routerLinkActive="active">Due Payments</a>
-        </li>
-        <li class="nav-item">
-          <a [routerLink]="['agreements']" class="nav-link" routerLinkActive="active">Agreements</a>
+          <a
+            [routerLink]="['agreements']"
+            class="nav-link"
+            routerLinkActive="active"
+            >Agreements</a
+          >
         </li>
         <li class="nav-item">
           <a [routerLink]="['companies']" class="nav-link" routerLinkActive="active">Companies</a>
