@@ -12,5 +12,6 @@ namespace BAL.Interfaces
         Task<bool> AddPaymentAsync(Payment Payment);
         Task<bool> UpdatePaymentAsync(Payment Payment);
         Task<bool> DeletePaymentAsync(int Id);
+        Task<List<Payment>> ProcessImportedData(List<Dictionary<string, object>> paymentRows);
     }
 }

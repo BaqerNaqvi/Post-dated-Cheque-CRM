@@ -5,5 +5,6 @@ namespace DAL.Interfaces
 {
     public interface IBankRepository : IBaseRepository<Bank, int>
     {
+        Task<Bank> GetBankByNameAsync(string bankName);
     }
 }

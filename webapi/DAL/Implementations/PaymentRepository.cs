@@ -41,6 +41,13 @@ namespace DAL.Implementations
 
             return await query.ToListAsync();
         }
-        
+
+        public async Task<Payment> GetPaymentByChequeNoAsync(string chequeNo)
+        {
+            Payment payment = await _context.Payments.FirstOrDefaultAsync(f =>
+                chequeNo == f.ChequeNo);
+
+            return payment;
+        }
     }
 }

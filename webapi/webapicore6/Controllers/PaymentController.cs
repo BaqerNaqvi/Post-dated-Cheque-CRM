@@ -3,7 +3,11 @@ using BAL.Interfaces;
 using DAL.Generic;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+using OfficeOpenXml;
 using System.Net;
 using System.Security.Claims;
 using webapicore6.Models;
@@ -187,5 +191,93 @@ namespace webapicore6.Controllers
                 return Ok(new ResponseDto<List<PaymentDto>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
             }
         }
+
+        [AllowAnonymous]
+        [HttpPost("import")]
+        public IActionResult Import(IFormFile file)
+        {
+            try
+            {
+                var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                if (fileExtension == ".xls")
+                {
+                    using (var stream = file.OpenReadStream())
+                    {
+                        var workbook = new HSSFWorkbook(stream);
+
+                        var worksheet = workbook.GetSheetAt(0);
+                        if (worksheet == null)
+                            return BadRequest("Invalid Excel file format.");
+
+                        // Read headers from row 37, cells 7, 9, 18, and 30
+                        var headers = new List<string>();
+                        var headerRow = worksheet.GetRow(37);
+                        foreach (var cellAddress in new[] { 7, 9, 18, 30 })
+                        {
+                            headers.Add(headerRow.GetCell(cellAddress).StringCellValue);
+                        }
+
+                        // Process data from row 41 onwards
+                        var data = new List<Dictionary<string, object>>();
+                        for (int row = 41; row <= worksheet.LastRowNum; row++)
+                        {
+                            var currentRow = worksheet.GetRow(row);
+
+
+                            var cell18 = currentRow.GetCell(18);
+                            if (cell18 != null && cell18.StringCellValue.Contains("PDC Deposit"))
+                            {
+                                var rowData = new Dictionary<string, object>();
+
+                                int headerIndex = 0;
+                                foreach (var cellAddress in new[] { 7, 9, 18, 30 })
+                                {
+                                    var cell = currentRow.GetCell(cellAddress);
+                                    var header = headers[headerIndex];
+                                    rowData.Add(header, GetCellValue(cell));
+
+                                    headerIndex++;
+                                }
+
+                                data.Add(rowData);
+                            }
+                        }
+
+                        var results = _service.ProcessImportedData(data).Result;
+                        return Ok(new ResponseDto<List<PaymentListDto>>(HttpStatusCode.OK, "", _mapper.Map<List<PaymentListDto>>(results)));
+                    }
+                }
+                else
+                {
+                    return BadRequest("Invalid file format. Only XLS format is supported.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error occurred during import: {ex.Message}");
+            }
+        }
+
+
+
+        private object GetCellValue(ICell cell)
+        {
+            if (cell == null)
+                return null;
+
+            switch (cell.CellType)
+            {
+                case CellType.Numeric:
+                    return cell.NumericCellValue;
+                case CellType.String:
+                    return cell.StringCellValue;
+                case CellType.Boolean:
+                    return cell.BooleanCellValue;
+                // Handle other cell types as needed
+                default:
+                    return null;
+            }
+        }
+
     }
 }

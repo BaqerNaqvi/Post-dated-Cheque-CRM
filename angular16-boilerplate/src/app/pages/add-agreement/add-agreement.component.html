@@ -1,290 +1,209 @@
 <!-- Content Header (Page header) -->
 <div class="content-header">
-  <div class="container-fluid">
-    <div class="row mb-2">
-      <div class="col-sm-6">
-        <h1>Agreement Detail</h1>
-      </div>
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Agreement Detail</h1>
+            </div>
+        </div>
     </div>
-  </div>
-  <!-- /.container-fluid -->
+    <!-- /.container-fluid -->
 </div>
 
 <!-- Main content -->
 <div class="content">
-  <div class="container-fluid">
-    <div class="card card-default">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-2">
-            <div class="form-group">
-              <label>Start Date:</label>
-              <input
-                type="text"
-                placeholder="Start Date"
-                class="form-control"
-                [(ngModel)]="agreement.startDate"
-                bsDatepicker
-                [bsConfig]="{
+    <div class="container-fluid">
+        <div class="card card-default">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Start Date:</label>
+                            <input type="text" placeholder="Start Date" class="form-control"
+                                [(ngModel)]="agreement.startDate" bsDatepicker [bsConfig]="{
                   adaptivePosition: true,
                   dateInputFormat: 'DD-MM-YYYY'
-                }"
-              />
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-group">
-              <label>End Date:</label>
-              <input
-                type="text"
-                placeholder="End Date"
-                class="form-control"
-                [(ngModel)]="agreement.endDate"
-                bsDatepicker
-                [bsConfig]="{
+                }" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>End Date:</label>
+                            <input type="text" placeholder="End Date" class="form-control"
+                                [(ngModel)]="agreement.endDate" bsDatepicker [bsConfig]="{
                   adaptivePosition: true,
                   dateInputFormat: 'DD-MM-YYYY'
-                }"
-              />
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-group">
-              <label>Company</label>
-              <select
-                id="companyDdl"
-                class="form-control select2bs4"
-                style="width: 100%"
-                [(ngModel)]="agreement.companyId"
-                name="companyDdl"
-                required
-                #companyDdl="ngModel"
-                (change)="onCompanySelect($event)"
-              >
-                <option
-                  *ngFor="let category of companies"
-                  [value]="category.id"
-                >
-                  {{ category.name }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-group">
-              <label>Branch</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="agreement.branch"
-              />
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-group">
-              <label>Floor</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="agreement.floor"
-              />
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-group">
-              <label>Office No.</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="agreement.officeNumber"
-              />
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-group">
-              <label>Section</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="agreement.section"
-              />
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="form-group">
-              <label>Work Station</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="agreement.workStation"
-              />
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="form-group">
-              <label>Notes</label>
-              <input
-                type="text"
-                class="form-control"
-                [(ngModel)]="agreement.description"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card card-default">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-3">
-            <div class="form-group">
-              <h4>Payments Schedule</h4>
-            </div>
-          </div>
-          <div class="col-sm-3">
-            <div class="form-group">
-              <button
-                type="button"
-                class="btn btn-block btn-outline-success"
-                (click)="insertNewPayment()"
-              >
-                <i class="fas fa-plus"></i>
-                Insert New Payment
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <table id="payment-table" #dynamicDropdownContainer>
-          <tr *ngFor="let paymentItem of agreementPayments; let i = index">
-            <div class="row payment-row">
-              <div class="col-sm-1">
-                <div class="form-group">
-                  <label>No.</label>
-                  <div class="input-group">
-                    <p>{{ i + 1 }}</p>
-                    <button (click)="removePaymentRow(i)" class="btn mtm-10">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </div>
+                }" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Company</label>
+                            <select id="companyDdl" class="form-control select2bs4" style="width: 100%"
+                                [(ngModel)]="agreement.companyId" name="companyDdl" required #companyDdl="ngModel"
+                                (change)="onCompanySelect($event)">
+                                <option *ngFor="let category of companies" [value]="category.id">
+                                    {{ category.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Branch</label>
+                            <input type="text" class="form-control" [(ngModel)]="agreement.branch" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Floor</label>
+                            <input type="text" class="form-control" [(ngModel)]="agreement.floor" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Office No.</label>
+                            <input type="text" class="form-control" [(ngModel)]="agreement.officeNumber" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Section</label>
+                            <input type="text" class="form-control" [(ngModel)]="agreement.section" />
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label>Work Station</label>
+                            <input type="text" class="form-control" [(ngModel)]="agreement.workStation" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <textarea type="text" class="form-control" [(ngModel)]="agreement.description"></textarea>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="col-sm-1">
-                <div class="form-group">
-                  <label>Due Date:</label>
-                  <input
-                    type="text"
-                    placeholder="Payment Due Date"
-                    class="form-control"
-                    [(ngModel)]="paymentItem.paymentDueDate"
-                    bsDatepicker
-                    [bsConfig]="{
+            </div>
+        </div>
+        <div class="card card-default">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <h4>Payments Schedule</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-block btn-outline-success"
+                                (click)="insertNewPayment()">
+                                <i class="fas fa-plus"></i>
+                                Insert New Payment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="payment-table" #dynamicDropdownContainer>
+                    <tr *ngFor="let paymentItem of agreementPayments; let i = index">
+                        <div class="row payment-row">
+                            <div class="col-sm-1" style="width: 6%;">
+                                <div class="form-group">
+                                    <label>No.</label>
+                                    <div class="input-group">
+                                        <p>{{ i + 1 }}</p>
+                                        <button (click)="removePaymentRow(i)" class="btn mtm-10">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label>Due Date:</label>
+                                    <input type="text" placeholder="Payment Due Date" class="form-control"
+                                        [(ngModel)]="paymentItem.paymentDueDate" bsDatepicker [bsConfig]="{
                       adaptivePosition: true,
                       dateInputFormat: 'DD-MM-YYYY'
-                    }"
-                  />
-                </div>
-              </div>
-              <div class="col-sm-1">
-                <div class="form-group">
-                  <label>Amount</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    [(ngModel)]="paymentItem.amount"
-                  />
-                </div>
-              </div>
-              <div class="col-sm-1">
-                <div class="form-group">
-                  <label>Method</label>
-                  <app-payment-method-select
-                    [(selectedPaymentMethod)]="paymentItem.paymentMethod"
-                    (selectedPaymentMethodChange)="
+                    }" />
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label>Amount</label>
+                                    <input type="number" class="form-control" [(ngModel)]="paymentItem.amount" />
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label>Method</label>
+                                    <app-payment-method-select [(selectedPaymentMethod)]="paymentItem.paymentMethod"
+                                        (selectedPaymentMethodChange)="
                       onPaymentMethodSelected($event, i)
-                    "
-                  ></app-payment-method-select>
-                </div>
-              </div>
-              <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
-                <div class="form-group">
-                  <label>Cheque Due Date:</label>
-                  <input
-                    type="text"
-                    placeholder="Cheque Due Date"
-                    class="form-control"
-                    [(ngModel)]="paymentItem.chequeDueDate"
-                    bsDatepicker
-                    [bsConfig]="{
+                    "></app-payment-method-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
+                                <div class="form-group">
+                                    <label>Chq Date:</label>
+                                    <input type="text" placeholder="Cheque Due Date" class="form-control"
+                                        [(ngModel)]="paymentItem.chequeDueDate" bsDatepicker [bsConfig]="{
                       adaptivePosition: true,
                       dateInputFormat: 'DD-MM-YYYY'
-                    }"
-                  />
-                </div>
-              </div>
-              <div class="col-sm-1" *ngIf="paymentItem.paymentMethod == 0">
-                <div class="form-group">
-                  <label>Cheque No.</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    [(ngModel)]="paymentItem.chequeNo"
-                  />
-                </div>
-              </div>
-              <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
-                <div class="form-group">
-                  <label>Cheque Bank</label>
-                  <select
-                    class="form-control select2bs4"
-                    style="width: 100%"
-                    [(ngModel)]="paymentItem.senderBankId"
-                    required
-                    initializeSelect2
-                    [attr.data-index]="i"
-                  >
-                    <option *ngFor="let bank of banks" [value]="bank.id">
-                      {{ bank.name }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-sm-1">
-                <div class="form-group">
-                  <label>Payment Status</label>
-                  <app-payment-status-select
-                    [(selectedPaymentStatus)]="paymentItem.paymentStatus"
-                    (selectedPaymentStatusChange)="
+                    }" />
+                                </div>
+                            </div>
+                            <div class="col-sm-1" *ngIf="paymentItem.paymentMethod == 0">
+                                <div class="form-group">
+                                    <label>Chq No.</label>
+                                    <input type="text" class="form-control" [(ngModel)]="paymentItem.chequeNo" />
+                                </div>
+                            </div>
+                            <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
+                                <div class="form-group">
+                                    <label>Chq Bank</label>
+                                    <select class="form-control select2bs4" style="width: 100%"
+                                        [(ngModel)]="paymentItem.senderBankId" required initializeSelect2
+                                        [attr.data-index]="i">
+                                        <option *ngFor="let bank of banks" [value]="bank.id">
+                                            {{ bank.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label>Pymt Status</label>
+                                    <app-payment-status-select [(selectedPaymentStatus)]="paymentItem.paymentStatus"
+                                        (selectedPaymentStatusChange)="
                       onPaymentMethodStatus($event, i)
-                    "
-                  ></app-payment-status-select>
-                </div>
-              </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label>Notes</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    [(ngModel)]="paymentItem.description"
-                  />
-                </div>
-              </div>
+                    "></app-payment-status-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label>Notes</label>
+                                    <!-- <input type="text" class="form-control" [(ngModel)]="paymentItem.description" /> -->
+                                    <textarea type="text" class="form-control" [(ngModel)]="paymentItem.description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                </table>
             </div>
-          </tr>
-        </table>
-      </div>
 
-      <div class="card-footer">
-        <button class="btn btn-default mr_5" (click)="backClicked()">
-          Cancel
-        </button>
-        <button class="btn btn-success float-right" (click)="submitAgreement()">
-          Save
-        </button>
-      </div>
+            <div class="card-footer">
+                <button class="btn btn-default mr_5" (click)="backClicked()">
+                    Cancel
+                </button>
+                <button class="btn btn-success float-right" (click)="submitAgreement()">
+                    Save
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <!-- /.content -->
