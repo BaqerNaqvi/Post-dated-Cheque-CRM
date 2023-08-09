@@ -92,14 +92,34 @@ namespace BAL.Implementation
                     var parts = cellDescriptionValue.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                     if (parts.Length >= 3)
                     {
-                        var chequeNumber = parts[2];
-                        var bankName = string.Join(" ", parts.Skip(3));
+                        var chequeStatus = parts[0] + " " + parts[1];
+                        decimal parsedAmount = 0;
+                        string targetKey = (chequeStatus == "Returned Cheque") ? "DEBIT" : "CREDIT";
 
-                        var payment = _repo.GetPaymentByChequeNoAsync(chequeNumber).Result;
-                        var bank = _repoBank.GetBankByNameAsync(bankName).Result;
+                        if (rowData.TryGetValue(targetKey, out var cellAmount) && cellAmount is string cellAmountValue)
+                        {
+                            decimal.TryParse(cellAmountValue, out parsedAmount);
+                        }
+
+                        var chequeNumber = parts[2];
+
+                        var payment = _repo.GetPaymentByChequeNoAndAmountAsync(chequeNumber, parsedAmount).Result;
+
+                        
 
                         if(payment != null)
                         {
+                            payment.PaymentStatus = chequeStatus == "Returned Cheque" ? 3 : 1; //Bounced:Paid
+                            if(payment.PaymentStatus == 1)
+                            {
+                                var bankName = string.Join(" ", parts.Skip(3));
+                                var bank = _repoBank.GetBankByNameAsync(bankName).Result;
+                                if (bank != null)
+                                {
+                                    payment.SenderBankId = bank.Id;
+                                }
+                            }
+
                             if (rowData.TryGetValue("TRAN DATE", out var cellDate) && cellDate is string cellDateValue)
                             {
                                 if (DateTime.TryParseExact(cellDateValue, "dd MMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
@@ -108,23 +128,11 @@ namespace BAL.Implementation
                                 }
                             }
 
-                            if (rowData.TryGetValue("CREDIT", out var cellAmount) && cellAmount is string cellAmountValue)
+                            if (rowData.TryGetValue("REF NO / CHQ NO", out var cellRef) && cellRef is string cellRefValue)
                             {
-                                if (decimal.TryParse(cellAmountValue, out decimal parsedAmount))
-                                {
-                                    payment.Amount = parsedAmount;
-                                }
-                                else
-                                {
-                                    payment.Amount = 0;
-                                }
+                                payment.StatementRef = cellRefValue;
                             }
 
-                            if (bank != null)
-                            {
-                                payment.SenderBankId = bank.Id;
-                            }
-                            payment.PaymentStatus = 1; //Paid
                             payment.PaymentMethod = 0; //Cheque
                             payment.Description += Environment.NewLine +"=> "+ cellDescriptionValue;
 

@@ -1,0 +1,8 @@
+To create IdentityTables in database:
+ - provide schema name in connection strings
+ - run Add-Migration InitialMigration -verbose -Context IdentityContext
+ - run Update-Database -verbose -Context IdentityContext
+ 
+To Scaffold-DbContext (DefaultDbContext) to create Model classes.
+
+	Scaffold-DbContext 'Server=localhost; Database=pdc; Uid=root;Pwd=P@ssw0rd' Pomelo.EntityFrameworkCore.MySql -OutputDir Models -t 'agreements','banks','company','payments' -ContextDir DbContexts -Context "DefaultContext" -force

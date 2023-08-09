@@ -17,6 +17,7 @@ namespace DAL.Models
         public decimal Amount { get; set; }
         public string? Description { get; set; }
         public DateTime? PaymentClearanceDate { get; set; }
+        public string? StatementRef { get; set; }
 
         public virtual Agreement Agreement { get; set; } = null!;
         public virtual Bank? ReceiverBank { get; set; }

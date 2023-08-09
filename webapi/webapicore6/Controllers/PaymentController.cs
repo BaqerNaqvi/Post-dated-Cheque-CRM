@@ -209,28 +209,33 @@ namespace webapicore6.Controllers
                         if (worksheet == null)
                             return BadRequest("Invalid Excel file format.");
 
-                        // Read headers from row 37, cells 7, 9, 18, and 30
+                        // Read headers from row 37, cells 7, 9, 18, 29, and 30
                         var headers = new List<string>();
                         var headerRow = worksheet.GetRow(37);
-                        foreach (var cellAddress in new[] { 7, 9, 18, 30 })
+                        foreach (var cellAddress in new[] { 7, 9, 18, 29, 30 }) // TRAN DATE, REF NO / CHQ NO, DESCRIPTION, DEBIT, CREDIT
                         {
                             headers.Add(headerRow.GetCell(cellAddress).StringCellValue);
                         }
 
                         // Process data from row 41 onwards
                         var data = new List<Dictionary<string, object>>();
-                        for (int row = 41; row <= worksheet.LastRowNum; row++)
+                        int endingRow = 30;
+                        for (int row = worksheet.LastRowNum; row >= endingRow; row--)
                         {
                             var currentRow = worksheet.GetRow(row);
 
 
-                            var cell18 = currentRow.GetCell(18);
-                            if (cell18 != null && cell18.StringCellValue.Contains("PDC Deposit"))
+                            var cell18 = currentRow.GetCell(18);//DESCRIPTION
+                            if(cell18 != null && cell18.StringCellValue == "Closing Balance")
+                            {
+                                endingRow = row+1;
+                            }
+                            if (cell18 != null && cell18.StringCellValue != "Opening Balance" && cell18.StringCellValue != "Closing Balance" && (cell18.StringCellValue.Contains("PDC Deposit") || cell18.StringCellValue.Contains("Returned Cheque")))
                             {
                                 var rowData = new Dictionary<string, object>();
 
                                 int headerIndex = 0;
-                                foreach (var cellAddress in new[] { 7, 9, 18, 30 })
+                                foreach (var cellAddress in new[] { 7, 9, 18, 29, 30 })
                                 {
                                     var cell = currentRow.GetCell(cellAddress);
                                     var header = headers[headerIndex];

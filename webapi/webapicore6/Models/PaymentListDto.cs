@@ -11,10 +11,10 @@
         public int? SenderBankId { get; set; }
         public int? ReceiverBankId { get; set; }
         public int PaymentStatus { get; set; }
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         public string? Description { get; set; }
         public DateTime? PaymentClearanceDate { get; set; }
-
+        public string? StatementRef { get; set; }
         public string? AgreementDates { get; set; }
         public string? CompanyName { get; set; }
         public string? CompanyBranchOfc { get; set; }
