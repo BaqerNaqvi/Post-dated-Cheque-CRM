@@ -28,6 +28,17 @@ export class PaymentService {
       ).pipe(retry(1), catchError(this.handleError));
     }
 
+    // POST
+  Import(xlsFile: File): Observable<any> {
+    const formData = new FormData();
+    if (xlsFile) {
+      formData.append('file', xlsFile);
+    }
+    return this.http.post<any>(
+      this.baseurl + '/api/payment/import',
+      formData
+    ).pipe(retry(0), catchError(this.handleError));
+  }
 
     private handleError(error: HttpErrorResponse) {
       let errorMessage = '';

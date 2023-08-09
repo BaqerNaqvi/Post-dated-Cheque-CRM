@@ -1,4 +1,5 @@
 ﻿using BAL.Interfaces;
+using DAL.Enums;
 using DAL.Generic;
 using DAL.Interfaces;
 using DAL.Models;
@@ -84,68 +85,65 @@ namespace BAL.Implementation
 
         public async Task<List<Payment>> ProcessImportedData(List<Dictionary<string, object>> paymentRows)
         {
-            List < Payment > updatedPayments = new List < Payment >();
+            var updatedPayments = new List<Payment>();
+
             foreach (var rowData in paymentRows)
-            {                
+            {
                 if (rowData.TryGetValue("DESCRIPTION", out var cellDescription) && cellDescription is string cellDescriptionValue)
                 {
-                    var parts = cellDescriptionValue.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    var parts = cellDescriptionValue.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     if (parts.Length >= 3)
                     {
                         var chequeStatus = parts[0] + " " + parts[1];
-                        decimal parsedAmount = 0;
                         string targetKey = (chequeStatus == "Returned Cheque") ? "DEBIT" : "CREDIT";
 
-                        if (rowData.TryGetValue(targetKey, out var cellAmount) && cellAmount is string cellAmountValue)
+                        if (rowData.TryGetValue(targetKey, out var cellAmount) && cellAmount is string cellAmountValue && decimal.TryParse(cellAmountValue, out var parsedAmount))
                         {
-                            decimal.TryParse(cellAmountValue, out parsedAmount);
-                        }
+                            var chequeNumber = parts[2];
 
-                        var chequeNumber = parts[2];
+                            var payment = await _repo.GetPaymentByChequeNoAndAmountAsync(chequeNumber, parsedAmount);
 
-                        var payment = _repo.GetPaymentByChequeNoAndAmountAsync(chequeNumber, parsedAmount).Result;
-
-                        
-
-                        if(payment != null)
-                        {
-                            payment.PaymentStatus = chequeStatus == "Returned Cheque" ? 3 : 1; //Bounced:Paid
-                            if(payment.PaymentStatus == 1)
+                            if (payment != null)
                             {
-                                var bankName = string.Join(" ", parts.Skip(3));
-                                var bank = _repoBank.GetBankByNameAsync(bankName).Result;
-                                if (bank != null)
+                                payment.PaymentStatus = (chequeStatus == "Returned Cheque") ? (int)PaymentStatus.Bounced : (int)PaymentStatus.Paid;
+
+                                if (payment.PaymentStatus == (int)PaymentStatus.Paid && rowData.TryGetValue("BANK NAME", out var cellBankName) && cellBankName is string bankName)
                                 {
-                                    payment.SenderBankId = bank.Id;
+                                    var bank = await _repoBank.GetBankByNameAsync(bankName);
+                                    if (bank != null)
+                                    {
+                                        payment.SenderBankId = bank.Id;
+                                    }
                                 }
-                            }
 
-                            if (rowData.TryGetValue("TRAN DATE", out var cellDate) && cellDate is string cellDateValue)
-                            {
-                                if (DateTime.TryParseExact(cellDateValue, "dd MMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                                if (rowData.TryGetValue("TRAN DATE", out var cellDate) && cellDate is string cellDateValue && DateTime.TryParseExact(cellDateValue, "dd MMM yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate))
                                 {
                                     payment.PaymentClearanceDate = parsedDate;
                                 }
+
+                                if (rowData.TryGetValue("REF NO / CHQ NO", out var cellRef) && cellRef is string cellRefValue)
+                                {
+                                    payment.StatementRef = cellRefValue;
+                                }
+
+                                payment.PaymentMethod = (int)PaymentMethod.Cheque;
+                                payment.Description += Environment.NewLine + "=> " + cellDescriptionValue;
+
+                                updatedPayments.Add(payment);
+                                _repo.Update(payment);
                             }
-
-                            if (rowData.TryGetValue("REF NO / CHQ NO", out var cellRef) && cellRef is string cellRefValue)
-                            {
-                                payment.StatementRef = cellRefValue;
-                            }
-
-                            payment.PaymentMethod = 0; //Cheque
-                            payment.Description += Environment.NewLine +"=> "+ cellDescriptionValue;
-
-                            updatedPayments.Add(payment);
-                            _repo.Update(payment);
                         }
                     }
                 }
             }
 
-            if(updatedPayments.Count > 0)
+            if (updatedPayments.Count > 0)
+            {
                 await _repo.SaveChangesAsync();
+            }
+
             return updatedPayments;
         }
+
     }
 }

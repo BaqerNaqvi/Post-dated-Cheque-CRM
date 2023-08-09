@@ -37,3 +37,6 @@
 #payment-table{
     width: 100%;
 }
+#importResultTable th {
+    min-width: 130px;
+}

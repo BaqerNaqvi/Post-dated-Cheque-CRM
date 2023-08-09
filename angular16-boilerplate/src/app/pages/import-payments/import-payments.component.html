@@ -1,0 +1,96 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Import Statement</h1>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+
+<!-- Main content -->
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <form #itemForm="ngForm" (ngSubmit)="uploadFile()">
+                                    <div class="form-group">
+                                        <label for="inputFile">File Upload</label>
+                                        <div class="input-group">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="inputFile"
+                                                    (change)="onFileChange($event)" enctype="multipart/form-data"
+                                                    name="inputFile" accept=".xls">
+                                                <label class="custom-file-label" for="inputFile">Choose file</label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <button class="input-group-text" type="submit">Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overlay" *ngIf="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Updated Payments</h3>
+                    </div>
+                    <div class="card-body">
+                        <table id="importResultTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Due Date</th>
+                                    <th>Amount</th>
+                                    <th>Cheque No</th>
+                                    <!-- <th>Cheque Date</th>   -->
+                                    <th>Status</th>
+                                    <th>Clearance Date</th>
+                                    <th>Cheque Bank</th>
+                                    <th>Notes</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let paymentItem of payments; let i = index">
+                                    <td>{{ paymentItem.companyBranchOfc }}</td>
+                                    <td>{{ paymentItem.paymentDueDate | date : "dd-MMM-y" }}</td>
+                                    <td>{{ paymentItem.amount }}</td>
+                                    <td>{{ paymentItem.chequeNo }}</td>
+                                    <!-- <td>{{ paymentItem.chequeDueDate | date : "dd-MMM-y" }}</td>   -->
+                                    <td>{{ getPaymentStatusName(paymentItem.paymentStatus)}}</td>
+                                    <td>{{paymentItem.paymentClearanceDate | date:'dd-MMM-y'}}</td>
+                                    <td>{{ paymentItem.senderBankName }}</td>
+                                    <td>{{ paymentItem.description }}</td>
+                                    <td>
+                                        <a [routerLink]="['/agreements/'+paymentItem.agreementId]">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="overlay" *ngIf="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content -->

@@ -5,6 +5,7 @@ import { AgreementComponent } from './pages/agreement/agreement.component';
 import { AddAgreementComponent } from './pages/add-agreement/add-agreement.component';
 import { CompaniesListComponent } from './pages/company/companies-list/companies-list.component';
 import { AddCompanyComponent } from './pages/company/add-company/add-company.component';
+import { ImportPaymentsComponent } from './pages/import-payments/import-payments.component';
 
 const routes: Routes = [
   {
@@ -18,7 +19,8 @@ const routes: Routes = [
   { path: "agreements/:id", component: AddAgreementComponent },
   { path: "companies", component: CompaniesListComponent },
   { path: "companies/add", component: AddCompanyComponent },
-  { path: "companies/:id", component: AddCompanyComponent }
+  { path: "companies/:id", component: AddCompanyComponent },
+  { path: "import", component: ImportPaymentsComponent }
 ];
 
 @NgModule({

@@ -194,67 +194,64 @@ namespace webapicore6.Controllers
 
         [AllowAnonymous]
         [HttpPost("import")]
-        public IActionResult Import(IFormFile file)
+        public async Task<IActionResult> Import(IFormFile file)
         {
             try
             {
                 var fileExtension = Path.GetExtension(file.FileName).ToLower();
-                if (fileExtension == ".xls")
+                if (fileExtension != ".xls")
                 {
-                    using (var stream = file.OpenReadStream())
+                    return BadRequest("Invalid file format. Only XLS format is supported.");
+                }
+
+                var rowDataList = new List<Dictionary<string, object>>();
+
+                using (var stream = file.OpenReadStream())
+                {
+                    var workbook = new HSSFWorkbook(stream);
+                    var worksheet = workbook.GetSheetAt(0);
+
+                    if (worksheet == null)
                     {
-                        var workbook = new HSSFWorkbook(stream);
+                        return BadRequest("Invalid Excel file format.");
+                    }
 
-                        var worksheet = workbook.GetSheetAt(0);
-                        if (worksheet == null)
-                            return BadRequest("Invalid Excel file format.");
+                    int endingRow = 40;
+                    for (int row = worksheet.LastRowNum; row >= endingRow; row--)
+                    {
+                        var currentRow = worksheet.GetRow(row);
+                        var cell18 = currentRow.GetCell(18);//Description
 
-                        // Read headers from row 37, cells 7, 9, 18, 29, and 30
-                        var headers = new List<string>();
-                        var headerRow = worksheet.GetRow(37);
-                        foreach (var cellAddress in new[] { 7, 9, 18, 29, 30 }) // TRAN DATE, REF NO / CHQ NO, DESCRIPTION, DEBIT, CREDIT
+                        if (cell18 != null)
                         {
-                            headers.Add(headerRow.GetCell(cellAddress).StringCellValue);
-                        }
-
-                        // Process data from row 41 onwards
-                        var data = new List<Dictionary<string, object>>();
-                        int endingRow = 30;
-                        for (int row = worksheet.LastRowNum; row >= endingRow; row--)
-                        {
-                            var currentRow = worksheet.GetRow(row);
-
-
-                            var cell18 = currentRow.GetCell(18);//DESCRIPTION
-                            if(cell18 != null && cell18.StringCellValue == "Closing Balance")
+                            var cell18Value = cell18.StringCellValue;
+                            if (cell18Value == "Closing Balance")
                             {
-                                endingRow = row+1;
+                                endingRow = row + 1;
                             }
-                            if (cell18 != null && cell18.StringCellValue != "Opening Balance" && cell18.StringCellValue != "Closing Balance" && (cell18.StringCellValue.Contains("PDC Deposit") || cell18.StringCellValue.Contains("Returned Cheque")))
+                            else if (cell18Value != "Opening Balance" && (cell18Value.Contains("PDC Deposit") || cell18Value.Contains("Returned Cheque")))
                             {
                                 var rowData = new Dictionary<string, object>();
 
-                                int headerIndex = 0;
-                                foreach (var cellAddress in new[] { 7, 9, 18, 29, 30 })
+                                var headers = new[] { 7, 9, 18, 29, 30 };
+                                for (int headerIndex = 0; headerIndex < headers.Length; headerIndex++)
                                 {
-                                    var cell = currentRow.GetCell(cellAddress);
-                                    var header = headers[headerIndex];
+                                    var cell = currentRow.GetCell(headers[headerIndex]);
+                                    var header = GetHeaderName(headers[headerIndex]);
                                     rowData.Add(header, GetCellValue(cell));
-
-                                    headerIndex++;
                                 }
 
-                                data.Add(rowData);
+                                rowDataList.Add(rowData);
                             }
                         }
-
-                        var results = _service.ProcessImportedData(data).Result;
-                        return Ok(new ResponseDto<List<PaymentListDto>>(HttpStatusCode.OK, "", _mapper.Map<List<PaymentListDto>>(results)));
                     }
-                }
-                else
-                {
-                    return BadRequest("Invalid file format. Only XLS format is supported.");
+
+                    var results = await _service.ProcessImportedData(rowDataList);
+
+                    // Filter distinct rows based on PaymentListDto.Id
+                    var distinctResults = results.GroupBy(p => p.Id).Select(g => g.First()).ToList();
+
+                    return Ok(new ResponseDto<List<PaymentListDto>>(HttpStatusCode.OK, "", _mapper.Map<List<PaymentListDto>>(distinctResults)));
                 }
             }
             catch (Exception ex)
@@ -263,12 +260,25 @@ namespace webapicore6.Controllers
             }
         }
 
-
+        private string GetHeaderName(int cellAddress)
+        {
+            switch (cellAddress)
+            {
+                case 7: return "TRAN DATE";
+                case 9: return "REF NO / CHQ NO";
+                case 18: return "DESCRIPTION";
+                case 29: return "DEBIT";
+                case 30: return "CREDIT";
+                default: return string.Empty;
+            }
+        }
 
         private object GetCellValue(ICell cell)
         {
             if (cell == null)
+            {
                 return null;
+            }
 
             switch (cell.CellType)
             {

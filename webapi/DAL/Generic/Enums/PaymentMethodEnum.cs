@@ -1,4 +1,4 @@
-﻿namespace webapicore6.Enums
+﻿namespace DAL.Enums
 {
     public enum PaymentMethod
     {
