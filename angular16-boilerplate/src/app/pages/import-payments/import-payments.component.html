@@ -56,8 +56,9 @@
                                     <th>Cheque No</th>
                                     <!-- <th>Cheque Date</th>   -->
                                     <th>Status</th>
-                                    <th>Clearance Date</th>
+                                    <th>Clearance</th>
                                     <th>Cheque Bank</th>
+                                    <th>Ref</th>
                                     <th>Notes</th>
                                     <th></th>
                                 </tr>
@@ -72,6 +73,7 @@
                                     <td>{{ getPaymentStatusName(paymentItem.paymentStatus)}}</td>
                                     <td>{{paymentItem.paymentClearanceDate | date:'dd-MMM-y'}}</td>
                                     <td>{{ paymentItem.senderBankName }}</td>
+                                    <td>{{ paymentItem.statementRef }}</td>
                                     <td>{{ paymentItem.description }}</td>
                                     <td>
                                         <a [routerLink]="['/agreements/'+paymentItem.agreementId]">Edit</a>
