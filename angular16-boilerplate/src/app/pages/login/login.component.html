@@ -1,44 +1,56 @@
 <!-- Content Header (Page header) -->
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Login</h1>
-            </div>
-        </div>
-    </div>
-    <!-- /.container-fluid -->
-</div>
 
 <!-- Main content -->
-<div class="content">
-    <div class="container-fluid">
-        <div class="card card-default">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" class="form-control" [(ngModel)]="username" />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" [(ngModel)]="password" />
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <button class="btn btn-success mt-30" (click)="login()">Login</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" *ngIf="incorrectCredentials">
-                    <p class="danger">Incorrect credentials!</p>
-                </div>
+<div
+  class="content"
+  style="top: 15%; width: 25%; left: 37%; position: absolute"
+>
+  <div class="container-fluid">
+    <div class="card card-default">
+      <div class="card-body">
+        <div class="row col-sm-12">
+          <img
+            src="assets/images/arafat.jpg"
+            alt="PDC Management System"
+            style="width: 200px; margin-left: 24%"
+          />
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label>Username</label>
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="username"
+                placeholder="Enter username"
+              />
             </div>
+          </div>
         </div>
+        <div class="row col-sm-12">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [(ngModel)]="password"
+                placeholder="Enter password"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row col-sm-12">
+          <div class="col-sm-12">
+            <div class="form-group">
+              <button class="btn btn-primary" (click)="login()">Login</button>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngIf="incorrectCredentials">
+          <p class="danger">Incorrect credentials!</p>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 <!-- /.content -->
