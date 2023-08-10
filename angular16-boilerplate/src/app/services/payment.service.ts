@@ -21,11 +21,20 @@ export class PaymentService {
 
 
     // POST
-    Search(filters: any): Observable<[Payment]> {
+    deletePayment(id: number): Observable<void> {
+      const url = `${this.baseurl}/api/payment/delete/${id}`;
+      return this.http.delete<void>(url).pipe(
+        retry(0),
+        catchError(this.handleError)
+      );
+    }
+
+     // POST
+     Search(filters: any): Observable<[Payment]> {
       return this.http.post<[Payment]>(
         this.baseurl + '/api/payment/search',
         filters
-      ).pipe(retry(1), catchError(this.handleError));
+      ).pipe(retry(0), catchError(this.handleError));
     }
 
     // POST

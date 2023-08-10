@@ -16,7 +16,7 @@ interface PaymentStatus {
   `,
 })
 export class PaymentStatusComponent implements AfterViewInit {
-  @ViewChild('PaymentStatusDdl') PaymentStatusDdl: ElementRef;
+  @ViewChild('paymentStatusDdl') PaymentStatusDdl: ElementRef;
   @Output() selectedPaymentStatusChange = new EventEmitter<number>();
 
   paymentStatuses: PaymentStatus[] = [

@@ -168,7 +168,7 @@ namespace webapicore6.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [AllowAnonymous]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeletePayment(int id)
         {

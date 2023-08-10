@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChildren, ElementRef, QueryList, ViewChild, NgZone, Injector, ApplicationRef } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChildren, ElementRef, QueryList, ViewChild, NgZone, Injector, ApplicationRef, TemplateRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AgreementService } from 'src/app/services/agreement.service';
@@ -13,6 +13,7 @@ import { Agreement } from 'src/app/shared/models/agreement';
 import { Bank } from 'src/app/shared/models/bank';
 import { Company } from 'src/app/shared/models/company';
 import { Payment } from 'src/app/shared/models/payment';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 declare var $: any;
 declare var moment: any;
 
@@ -25,7 +26,8 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
   selectedCompanyId: any;
   selectedMonth: string;
   selectedPaymentMethod: number;
-
+  paymentIdToDelete: number = 0;
+  paymentIndexToDelete: number = 0;
   paymentSearchFilter: any = {
     agreementId: null,
     companyId: null,
@@ -40,7 +42,8 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
   agreementPayments: Payment[] = [];
   agreement: Agreement = new Agreement(0, 0, moment(new Date()).format(Constants.DATE_FORMAT), moment(new Date()).format(Constants.DATE_FORMAT));
   @ViewChild('dynamicDropdownContainer', { read: ElementRef }) dynamicDropdownContainer!: ElementRef;
-
+  modalRef?: BsModalRef;
+  
   constructor(public paymentService: PaymentService,
     public agreementService: AgreementService,
     public bankService: BankService,
@@ -49,7 +52,7 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     private router: Router,
     private _location: Location,
     private injector: Injector,
-    private appRef: ApplicationRef,) {
+    private appRef: ApplicationRef,private modalService: BsModalService) {
 
   }
 
@@ -80,18 +83,7 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
 
   insertNewPayment() {
     this.agreementPayments.push(new Payment(0, 0, 0, moment(new Date()).format(Constants.DATE_FORMAT), 0, 0));
-
-    // setTimeout(() => {
-    //   $('.select2bs4').select2({
-    //     theme: 'bootstrap4',
-    //     placeholder: "Select an Option"
-    //   });
-    // }, 100);
-  }
-
-  removePaymentRow(indexToRemove: number) {
-    this.agreementPayments.splice(indexToRemove, 1);
-  }
+  }  
 
   getAgreementById(id: number) {
     this.agreementService.GetById(id).subscribe((result: any) => {
@@ -106,8 +98,6 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
         paymentClearanceDate: x.paymentClearanceDate != null ? moment(x.paymentClearanceDate).format(Constants.DATE_FORMAT) : null
       }));
     });
-
-
   }
 
   submitAgreement() {
@@ -153,9 +143,44 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     const target = event.target as HTMLSelectElement;
     this.agreement.companyId = parseInt(target.value, 10);
   }
+
   backClicked() {
     this._location.back();
   }
+
+  decline(): void {
+    this.modalRef?.hide();
+  }
+ 
+  confirm(): void {
+    this.modalRef?.hide();
+    this.deletePayment(this.paymentIdToDelete);
+  }
+  
+  removePaymentRow(indexToRemove: number, template: TemplateRef<any>) {
+    var paymentToDelete = this.agreementPayments[indexToRemove];
+    if (paymentToDelete.id > 0) {
+      this.paymentIdToDelete = paymentToDelete.id;
+      this.paymentIndexToDelete = indexToRemove;
+      this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+    } else {
+      this.agreementPayments.splice(indexToRemove, 1);
+    }
+  }
+
+  deletePayment(paymentId: number) {
+    this.paymentService.deletePayment(paymentId).subscribe(
+      {
+        next: (result: any) => {
+          this.paymentIdToDelete = 0;
+          this.agreementPayments.splice(this.paymentIndexToDelete, 1);
+        },
+        error: (e) => console.error(e),
+        complete: () => console.info('complete')
+      }
+    );
+  }
+
   jqueryScriptsBinding() {
     $('.select2bs4').select2({
       theme: 'bootstrap4',

@@ -18,6 +18,7 @@ import { InitializeSelect2Directive } from './shared/directives/initialize-selec
 import { CompaniesListComponent } from './pages/company/companies-list/companies-list.component';
 import { AddCompanyComponent } from './pages/company/add-company/add-company.component';
 import { ImportPaymentsComponent } from './pages/import-payments/import-payments.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +40,7 @@ import { ImportPaymentsComponent } from './pages/import-payments/import-payments
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ModalModule.forRoot(),
     BsDatepickerModule.forRoot()
   ],
   providers: [],
