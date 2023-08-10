@@ -6,6 +6,8 @@ import { AddAgreementComponent } from './pages/add-agreement/add-agreement.compo
 import { CompaniesListComponent } from './pages/company/companies-list/companies-list.component';
 import { AddCompanyComponent } from './pages/company/add-company/add-company.component';
 import { ImportPaymentsComponent } from './pages/import-payments/import-payments.component';
+import { authGuard } from './services/auth.guard';
+import { LoginComponent } from './pages/login/login.component';
 
 const routes: Routes = [
   {
@@ -13,14 +15,15 @@ const routes: Routes = [
     redirectTo: 'due-payments',
     pathMatch: 'full'
   },
-  { path: "due-payments", component: DuePaymentsComponent },
-  { path: "agreements", component: AgreementComponent },
-  { path: "agreements/add", component: AddAgreementComponent },
-  { path: "agreements/:id", component: AddAgreementComponent },
-  { path: "companies", component: CompaniesListComponent },
-  { path: "companies/add", component: AddCompanyComponent },
-  { path: "companies/:id", component: AddCompanyComponent },
-  { path: "import", component: ImportPaymentsComponent }
+  { path: 'login', component: LoginComponent },
+  { path: "due-payments", component: DuePaymentsComponent, canActivate: [authGuard] },
+  { path: "agreements", component: AgreementComponent, canActivate: [authGuard] },
+  { path: "agreements/add", component: AddAgreementComponent, canActivate: [authGuard] },
+  { path: "agreements/:id", component: AddAgreementComponent, canActivate: [authGuard] },
+  { path: "companies", component: CompaniesListComponent, canActivate: [authGuard] },
+  { path: "companies/add", component: AddCompanyComponent, canActivate: [authGuard] },
+  { path: "companies/:id", component: AddCompanyComponent, canActivate: [authGuard] },
+  { path: "import", component: ImportPaymentsComponent, canActivate: [authGuard] }
 ];
 
 @NgModule({

@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Bank } from '../shared/models/bank';
+import { backendUrl } from '../shared/models/app.constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BankService {
 // Base url
-baseurl = 'https://localhost:7183';
+baseurl = backendUrl;
 // Http Headers
 httpOptions = {
   headers: new HttpHeaders({

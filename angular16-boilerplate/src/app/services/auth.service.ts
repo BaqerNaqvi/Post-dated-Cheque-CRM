@@ -1,13 +1,12 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-import { Company } from '../shared/models/company';
 import { backendUrl } from '../shared/models/app.constants';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, catchError, retry, throwError } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
-export class CompanyService {
+export class AuthService {
   // Base url
   baseurl = backendUrl;
   // Http Headers
@@ -20,33 +19,17 @@ export class CompanyService {
   constructor(private http: HttpClient) { }
 
 
-  GetAll() {
-    return this.http.get<Company[]>(this.baseurl + '/api/company');
-  }
-
-  GetById(id: number) {
-    return this.http.get<Company[]>(this.baseurl + '/api/company/' + id);
-  }
-
   // POST
-  Create(data: any): Observable<any> {
-    console.log("company-payload:", data);
+  Login(data: any): Observable<any> {
     return this.http.post<any>
       (
-        this.baseurl + '/api/company/add',
+        this.baseurl + '/api/auth/login',
         JSON.stringify(data),
         this.httpOptions
       )
       .pipe(retry(0), catchError(this.handleError));
   }
 
-  // POST
-  Search(filters: any): Observable<[Company]> {
-    return this.http.post<[Company]>(
-      this.baseurl + '/api/company/search',
-      filters
-    ).pipe(retry(1), catchError(this.handleError));
-  }
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {

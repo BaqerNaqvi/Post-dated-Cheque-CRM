@@ -19,6 +19,7 @@ import { CompaniesListComponent } from './pages/company/companies-list/companies
 import { AddCompanyComponent } from './pages/company/add-company/add-company.component';
 import { ImportPaymentsComponent } from './pages/import-payments/import-payments.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { LoginComponent } from './pages/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +33,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     InitializeSelect2Directive,
     CompaniesListComponent,
     AddCompanyComponent,
-    ImportPaymentsComponent
+    ImportPaymentsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
