@@ -64,11 +64,10 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     this.getAllCompannies();
     setTimeout(() => {
       this.jqueryScriptsBinding();
-    }, 200);
+    }, 500);
   }
 
   ngAfterViewInit() {
-    // this.jqueryScriptsBinding();
   }
 
   onPaymentMethodSelected(paymentMethodId: number, paymentItemIndex: number) {
@@ -158,10 +157,10 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     this._location.back();
   }
   jqueryScriptsBinding() {
-    // $('.select2bs4').select2({
-    //   theme: 'bootstrap4',
-    //   placeholder: "Select an Option"
-    // });
+    $('.select2bs4').select2({
+      theme: 'bootstrap4',
+      placeholder: "Select an Option"
+    });
 
     $('#companyDdl').select2({
       theme: 'bootstrap4',
@@ -170,8 +169,6 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
       const data = e.params.data;
       this.selectedCompanyId = data.id;
       this.agreement.companyId = data.id;
-      // Manually trigger Angular change detection to update the model property
-      // this.detectChanges();
     });
 
     $(this.dynamicDropdownContainer.nativeElement).on('select2:select', (e: any) => {
@@ -183,20 +180,5 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
         console.log('Selected value:', data.id, ' for index:', index);
       }
     });
-  }
-
-  private detectChanges(): void {
-    try {
-      // Use the 'ApplicationRef' and 'NgZone' to trigger change detection
-      // This is a workaround as ChangeDetectorRef.detectChanges() may not always work with select2
-      const appRef = this.injector.get(ApplicationRef);
-      const zone: NgZone = this.injector.get(NgZone);
-
-      zone.run(() => {
-        appRef.tick();
-      });
-    } catch (e) {
-      console.error('Error while triggering change detection:', e);
-    }
   }
 }

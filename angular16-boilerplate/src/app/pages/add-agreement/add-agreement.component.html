@@ -137,7 +137,7 @@
                                     <input type="number" class="form-control" [(ngModel)]="paymentItem.amount" />
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-1" style="width: 10%">
                                 <div class="form-group">
                                     <label>Method</label>
                                     <app-payment-method-select [(selectedPaymentMethod)]="paymentItem.paymentMethod"
@@ -146,7 +146,7 @@
                     "></app-payment-method-select>
                                 </div>
                             </div>
-                            <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
+                            <div class="col-sm-2" style="width: 10%" *ngIf="paymentItem.paymentMethod == 0">
                                 <div class="form-group">
                                     <label>Chq Date:</label>
                                     <input type="text" placeholder="Cheque Due Date" class="form-control"
@@ -174,7 +174,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-1" style="width: 10%">
                                 <div class="form-group">
                                     <label>Pymt Status</label>
                                     <app-payment-status-select [(selectedPaymentStatus)]="paymentItem.paymentStatus"
@@ -183,7 +183,7 @@
                     "></app-payment-status-select>
                                 </div>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-2" style="width: 22%">
                                 <div class="form-group">
                                     <label>Notes</label>
                                     <!-- <input type="text" class="form-control" [(ngModel)]="paymentItem.description" /> -->
