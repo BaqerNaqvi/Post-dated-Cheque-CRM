@@ -7,5 +7,6 @@ namespace DAL.Interfaces
     {
         Task<List<Payment>> GetByFiltersAsync(PaymentFilters paymentFilters);
         Task<List<Payment>> GetPaymentByAgreementIdAsync(int agreeId);
+        Task<Payment> GetPaymentByChequeNoAndAmountAsync(string chequeNo, decimal amount);
     }
 }

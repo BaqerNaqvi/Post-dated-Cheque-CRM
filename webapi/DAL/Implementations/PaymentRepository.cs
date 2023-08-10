@@ -41,6 +41,13 @@ namespace DAL.Implementations
 
             return await query.ToListAsync();
         }
-        
+
+        public async Task<Payment> GetPaymentByChequeNoAndAmountAsync(string chequeNo, decimal amount)
+        {
+            Payment payment = await _context.Payments.FirstOrDefaultAsync(f =>
+                chequeNo == f.ChequeNo && amount == f.Amount);
+
+            return payment;
+        }
     }
 }

@@ -40,6 +40,8 @@ namespace DAL.DbContexts
             {
                 entity.ToTable("agreements");
 
+                entity.UseCollation("utf8mb4_general_ci");
+
                 entity.HasIndex(e => e.CompanyId, "company_agreements_fk_idx");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -164,7 +166,9 @@ namespace DAL.DbContexts
 
                 entity.Property(e => e.AgreementId).HasColumnName("agreement_id");
 
-                entity.Property(e => e.Amount).HasColumnName("amount");
+                entity.Property(e => e.Amount)
+                    .HasPrecision(10)
+                    .HasColumnName("amount");
 
                 entity.Property(e => e.ChequeDueDate)
                     .HasColumnType("datetime")
@@ -193,6 +197,10 @@ namespace DAL.DbContexts
                 entity.Property(e => e.ReceiverBankId).HasColumnName("receiver_bank_id");
 
                 entity.Property(e => e.SenderBankId).HasColumnName("sender_bank_id");
+
+                entity.Property(e => e.StatementRef)
+                    .HasMaxLength(45)
+                    .HasColumnName("statementRef");
 
                 entity.HasOne(d => d.Agreement)
                     .WithMany(p => p.Payments)

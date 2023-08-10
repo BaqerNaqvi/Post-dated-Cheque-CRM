@@ -16,6 +16,7 @@ export class Payment {
     public companyBranchOfc?: string | null;
     public receiverBankName?: string | null;
     public senderBankName?: string | null;
+    public statementRef?: string | null;
 
     constructor(
         id: number,
