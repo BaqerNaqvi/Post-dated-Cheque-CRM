@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { backendUrl } from '../shared/models/app.constants';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, retry, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, retry, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +15,31 @@ export class AuthService {
       'Content-Type': 'application/json',
     }),
   };
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    const jwtToken = sessionStorage.getItem('jwt');
+    this.isAuthenticatedSubject.next(!!jwtToken);
+  }
 
+  updateAuthenticationStatus(isAuthenticated: boolean): void {
+    this.isAuthenticatedSubject.next(isAuthenticated);
+  }
 
-  // POST
   Login(data: any): Observable<any> {
-    return this.http.post<any>
-      (
-        this.baseurl + '/api/auth/login',
-        JSON.stringify(data),
-        this.httpOptions
-      )
-      .pipe(retry(0), catchError(this.handleError));
+    return this.http.post<any>(
+      `${this.baseurl}/api/auth/login`,
+      JSON.stringify(data),
+      this.httpOptions
+    ).pipe(
+      retry(0),
+      catchError(this.handleError),
+      tap(() => {
+        // Update the authentication status upon successful login
+        this.updateAuthenticationStatus(true);
+      })
+    );
   }
 
   private handleError(error: HttpErrorResponse) {

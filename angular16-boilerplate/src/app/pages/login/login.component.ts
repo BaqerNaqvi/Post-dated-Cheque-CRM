@@ -11,6 +11,8 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
+  incorrectCredentials: boolean = false;
+
   constructor(public authService: AuthService, private router: Router) {
 
   }
@@ -28,7 +30,7 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem("user", result.data.user);
           this.router.navigate(['/due-payments']);
         },
-        error: (e) => console.error(e),
+        error: (e) => { console.error(e); this.incorrectCredentials = true; },
         complete: () => console.info('complete')
       });
     }
