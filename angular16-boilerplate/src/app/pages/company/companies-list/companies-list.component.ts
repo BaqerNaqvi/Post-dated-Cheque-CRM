@@ -9,6 +9,7 @@ import { Company } from 'src/app/shared/models/company';
 })
 export class CompaniesListComponent implements OnInit {
   companies: Company[] = [];
+  loading: boolean = false;
   constructor(public companyService: CompanyService) {
   }
   searchFilter: any = {
@@ -22,15 +23,11 @@ export class CompaniesListComponent implements OnInit {
     this.searchFilter.name = null;
   }
 
-  getAllCompanies() {
-    this.companyService.GetAll().subscribe((result: any) => {
-      this.companies = result.data.sort((a: Company, b: Company) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
-    });
-  }
-
   searchCompanies() {
+    this.loading = true;
     this.companyService.Search(this.searchFilter).subscribe((result: any) => {
       this.companies = result.data.sort((a: Company, b: Company) => a.name > b.name ? 1 : -1);
+      this.loading = false;
     });
   }
 }

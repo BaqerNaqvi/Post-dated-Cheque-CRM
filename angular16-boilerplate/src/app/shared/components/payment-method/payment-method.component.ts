@@ -20,9 +20,10 @@ export class PaymentMethodComponent implements AfterViewInit {
   @Output() selectedPaymentMethodChange = new EventEmitter<number>();
 
   paymentMethods: PaymentMethod[] = [
+    { id: null, name: 'All' },
     { id: PaymentMethodEnum.Cheque, name: 'Cheque' },
     { id: PaymentMethodEnum.Cash, name: 'Cash' },
-    { id: PaymentMethodEnum.Advanced, name: 'Advanced' },
+    // { id: PaymentMethodEnum.Advanced, name: 'Advanced' },
     { id: PaymentMethodEnum.Online, name: 'Online' },
   ];
 

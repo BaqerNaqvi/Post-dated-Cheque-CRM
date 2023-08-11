@@ -35,7 +35,7 @@
                                 <div class="form-group">
                                     <label for="agreementDdl">Company Name</label>
                                     <input type="text" id="branchTxt" class="form-control"
-                                        [(ngModel)]="searchFilter.name" name="branchTxt" required />
+                                        [(ngModel)]="searchFilter.name" name="branchTxt" required  placeholder="Search by company name"/>
                                 </div>
                             </div>
                         </div>
@@ -75,6 +75,9 @@
 
                         </table>
                     </div>
+                    <div class="overlay" *ngIf="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                      </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->

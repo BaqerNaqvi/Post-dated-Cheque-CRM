@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DuePaymentsComponent } from './pages/due-payments/due-payments.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { PaymentStatusComponent } from './shared/components/payment-status/payment-status.component';
 import { MonthsComponent } from './shared/components/months/months.component';
 import { PaymentMethodComponent } from './shared/components/payment-method/payment-method.component';
@@ -20,6 +20,7 @@ import { AddCompanyComponent } from './pages/company/add-company/add-company.com
 import { ImportPaymentsComponent } from './pages/import-payments/import-payments.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LoginComponent } from './pages/login/login.component';
+import { RequestInterceptor } from './services/request.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +46,7 @@ import { LoginComponent } from './pages/login/login.component';
     ModalModule.forRoot(),
     BsDatepickerModule.forRoot()
   ],
-  providers: [],
+  providers: [    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

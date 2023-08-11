@@ -71,11 +71,11 @@ export class AgreementComponent implements AfterViewInit {
     this.paymentSearchFilter.month = month.split('-')[0];
     this.paymentSearchFilter.year = month.split('-')[1];
   }
-
+  loading: boolean = false;
   paymentStatusOptions = Object.values(PaymentStatusEnum).map(value => ({ name: PaymentStatusEnum[value as number], value }));
 
   ngOnInit(): void {
-    this.getAllBanks();
+    // this.getAllBanks();
     this.getAllCompannies();
     this.getAllAgreements();
     setTimeout(() => {
@@ -93,8 +93,10 @@ export class AgreementComponent implements AfterViewInit {
   }
 
   searchAgreements() {
+    this.loading = true;
     this.agreementService.Search(this.paymentSearchFilter).subscribe((result: any) => {
       this.agreements = result.data.sort((a: Agreement, b: Agreement) => a.startDate > b.startDate ? 1 : -1);
+      this.loading = false;
     });
   }
 
@@ -121,6 +123,7 @@ export class AgreementComponent implements AfterViewInit {
   getAllCompannies() {
     this.companyService.GetAll().subscribe((result: any) => {
       this.companies = result.data.sort((a: Company, b: Company) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
+      this.companies.unshift({ id: null, name: 'All' });
     });
     // Add "All" option to the array
     // this.companies.push({ id: 0, name: 'All' });
@@ -143,7 +146,7 @@ export class AgreementComponent implements AfterViewInit {
     $('#companyDdl').on('select2:select', (e: any) => {
       var data = e.params.data;
       console.log(data);
-      this.paymentSearchFilter.companyId = data.id;
+      this.paymentSearchFilter.companyId = data.id == "null" ? null : data.id;
       // this.getAgreementByCompanyId();
     });
 

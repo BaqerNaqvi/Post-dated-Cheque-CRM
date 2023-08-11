@@ -23,7 +23,7 @@ namespace webapicore6.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -39,7 +39,7 @@ namespace webapicore6.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("search")]
         public async Task<IActionResult> Search(CompanyFilters filters)
         {
@@ -56,7 +56,7 @@ namespace webapicore6.Controllers
 
         //[Authorize(AuthenticationSchemes = "Bearer")]
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetxById(int id)
         {
@@ -71,7 +71,7 @@ namespace webapicore6.Controllers
         }
 
         //[Authorize(AuthenticationSchemes = "Bearer")]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("add")]
         public async Task<IActionResult> Add(CompanyDto dto)
         {
@@ -104,7 +104,7 @@ namespace webapicore6.Controllers
         }
 
         //[Authorize(AuthenticationSchemes = "Bearer")]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("update")]
         public async Task<IActionResult> Update(CompanyDto dto)
         {

@@ -27,7 +27,7 @@
                                                 <input type="file" class="custom-file-input" id="inputFile"
                                                     (change)="onFileChange($event)" enctype="multipart/form-data"
                                                     name="inputFile" accept=".xls">
-                                                <label class="custom-file-label" for="inputFile">Choose file</label>
+                                                <label class="custom-file-label" for="inputFile">{{ selectedFileName }}</label>
                                             </div>
                                             <div class="input-group-append">
                                                 <button class="input-group-text" type="submit">Upload</button>

@@ -23,7 +23,7 @@ namespace webapicore6.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         public async Task<IActionResult> GetAllAgreements()
         {
@@ -40,7 +40,7 @@ namespace webapicore6.Controllers
         }
 
         //[Authorize(AuthenticationSchemes = "Bearer")]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("search")]
         public async Task<IActionResult> SearchAllPayments(AgreementFilters filters)
         {
@@ -56,7 +56,7 @@ namespace webapicore6.Controllers
         }
 
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("company/{companyid}")]
         public async Task<IActionResult> GetAgreementsByCompanyId(int companyid)
         {
@@ -70,7 +70,7 @@ namespace webapicore6.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAgreementById(int id)
         {
@@ -84,8 +84,7 @@ namespace webapicore6.Controllers
             }
         }
 
-        //[Authorize(AuthenticationSchemes = "Bearer")]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("add")]
         public async Task<IActionResult> Add(AgreementDto agreementDto)
         {

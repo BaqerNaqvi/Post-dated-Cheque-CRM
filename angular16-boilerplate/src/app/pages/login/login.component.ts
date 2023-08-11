@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   incorrectCredentials: boolean = false;
-
+  loading: boolean = false;
   constructor(public authService: AuthService, private router: Router) {
 
   }
@@ -24,13 +24,15 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.username != '' && this.password != "") {
+      this.loading = true;
       this.authService.Login({ "username": this.username, "password": this.password }).subscribe({
         next: (result: any) => {
           sessionStorage.setItem("jwt", result.data.token);
           sessionStorage.setItem("user", result.data.user);
+          this.loading = false;
           this.router.navigate(['/due-payments']);
         },
-        error: (e) => { console.error(e); this.incorrectCredentials = true; },
+        error: (e) => { console.error(e); this.incorrectCredentials = true;this.loading = false; },
         complete: () => console.info('complete')
       });
     }

@@ -31,19 +31,11 @@
                 <div class="form-group">
                   <label for="monthDdl">Month</label>
 
-                  <app-month-select (selectedMonthChange)="onMonthSelected($event)"></app-month-select>
+                  <app-month-select [selectedMonth]="selectedMonthParent"
+                    (selectedMonthChange)="onMonthSelected($event)"></app-month-select>
                 </div>
               </div>
-              <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="bankDdl">Cheque Bank</label>
-                  <select id="bankDdl" class="form-control select2bs4" style="width: 100%;"
-                    [(ngModel)]="paymentSearchFilter.bankId" name="bankDdl" required>
-                    <option *ngFor="let category of banks" [value]="category.id">
-                      {{category.name}}</option>
-                  </select>
-                </div>
-              </div>
+
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="companyDdl">Company</label>
@@ -55,22 +47,22 @@
                   </select>
                 </div>
               </div>
-              <!-- <div class="col-sm-2">
-                <div class="form-group">
-                  <label for="agreementDdl">Agreement</label>
-                  <select id="agreementDdl" class="form-control select2bs4" style="width: 100%;"
-                    [(ngModel)]="paymentSearchFilter.agreementId" name="agreementDdl" required>
-                    <option *ngFor="let category of agreements" [value]="category.id">
-                      {{category.startDate | date:'dd-MMM-y'}} : {{category.endDate | date:'dd-MMM-y'}}</option>
-                  </select>
-                </div>
-              </div> -->
               <div class="col-sm-2">
                 <div class="form-group">
                   <label for="paymentMethodDdl">Payment Method</label>
                   <app-payment-method-select (selectedPaymentMethodChange)="
                       onPaymentMethodSelected($event)
                     "></app-payment-method-select>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
+                  <label for="bankDdl">Sender Bank</label>
+                  <select id="bankDdl" class="form-control select2bs4" style="width: 100%;"
+                    [(ngModel)]="paymentSearchFilter.bankId" name="bankDdl" required>
+                    <option *ngFor="let category of banks" [value]="category.id">
+                      {{category.name}}</option>
+                  </select>
                 </div>
               </div>
               <div class="col-sm-2">
@@ -92,20 +84,20 @@
             <table id="example1" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th>Company</th>
-                  <th>Due Date</th>
-                  <th>Amount</th>
+                  <th style="min-width: 200px">Company</th>
+                  <th style="min-width: 100px">Due Date</th>
+                  <th style="min-width: 90px">Amount</th>
 
-                  <th>Payment Method</th>
+                  <th style="min-width: 122px">Pymt Method</th>
                   <!-- <th>Agreement</th> -->
-                  <th>Cheque No</th>
-                  <th>Cheque Due Date</th>
+                  <th style="min-width: 90px">Chq No</th>
+                  <th style="min-width: 122px">Chq Due Date</th>
 
-                  <th>Status</th>
+                  <th style="min-width: 85px">Status</th>
                   <!-- <th>Clearance Date</th> -->
 
-                  <th>Cheque Bank</th>
-                  <th>Notes</th>
+                  <th style="min-width: 200px">Chq Bank</th>
+                  <th style="min-width: 300px">Notes</th>
                   <th></th>
                 </tr>
               </thead>
@@ -132,6 +124,9 @@
             </table>
           </div>
           <!-- /.card-body -->
+          <div class="overlay" *ngIf="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+          </div>
         </div>
         <!-- /.card -->
       </div>

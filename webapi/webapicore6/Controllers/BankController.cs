@@ -23,7 +23,7 @@ namespace webapicore6.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -41,7 +41,7 @@ namespace webapicore6.Controllers
 
         //[Authorize(AuthenticationSchemes = "Bearer")]
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBankById(int id)
         {

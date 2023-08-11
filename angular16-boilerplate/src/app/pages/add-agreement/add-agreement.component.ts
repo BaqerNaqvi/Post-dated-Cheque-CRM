@@ -43,7 +43,8 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
   agreement: Agreement = new Agreement(0, 0, moment(new Date()).format(Constants.DATE_FORMAT), moment(new Date()).format(Constants.DATE_FORMAT));
   @ViewChild('dynamicDropdownContainer', { read: ElementRef }) dynamicDropdownContainer!: ElementRef;
   modalRef?: BsModalRef;
-  
+
+  invalidForm: boolean = false;
   constructor(public paymentService: PaymentService,
     public agreementService: AgreementService,
     public bankService: BankService,
@@ -52,7 +53,7 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
     private router: Router,
     private _location: Location,
     private injector: Injector,
-    private appRef: ApplicationRef,private modalService: BsModalService) {
+    private appRef: ApplicationRef, private modalService: BsModalService) {
 
   }
 
@@ -83,7 +84,7 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
 
   insertNewPayment() {
     this.agreementPayments.push(new Payment(0, 0, 0, moment(new Date()).format(Constants.DATE_FORMAT), 0, 0));
-  }  
+  }
 
   getAgreementById(id: number) {
     this.agreementService.GetById(id).subscribe((result: any) => {
@@ -101,28 +102,33 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
   }
 
   submitAgreement() {
-    this.agreement.startDate = moment(this.agreement.startDate, Constants.DATE_FORMAT).format('YYYY-MM-DD');
-    this.agreement.endDate = moment(this.agreement.endDate, Constants.DATE_FORMAT).format('YYYY-MM-DD');
-    this.agreementPayments = this.agreementPayments.map((x: Payment) => ({
-      ...x,
-      agreementId: this.agreement.id,
-      paymentDueDate: moment(x.paymentDueDate, Constants.DATE_FORMAT).format('YYYY-MM-DD'),
-      chequeDueDate: x.chequeDueDate != null ? moment(x.chequeDueDate, Constants.DATE_FORMAT).format('YYYY-MM-DD') : null,
-      paymentClearanceDate: x.paymentClearanceDate != null ? moment(x.paymentClearanceDate, Constants.DATE_FORMAT).format('YYYY-MM-DD') : null
-    }));
+    if (this.agreement.startDate == undefined || this.agreement.endDate == undefined || this.agreement.companyId == 0) {
+      this.invalidForm = true;
+    } else {
+      this.agreement.startDate = moment(this.agreement.startDate, Constants.DATE_FORMAT).format('YYYY-MM-DD');
+      this.agreement.endDate = moment(this.agreement.endDate, Constants.DATE_FORMAT).format('YYYY-MM-DD');
+      this.agreementPayments = this.agreementPayments.map((x: Payment) => ({
+        ...x,
+        agreementId: this.agreement.id,
+        paymentDueDate: moment(x.paymentDueDate, Constants.DATE_FORMAT).format('YYYY-MM-DD'),
+        chequeDueDate: x.chequeDueDate != null ? moment(x.chequeDueDate, Constants.DATE_FORMAT).format('YYYY-MM-DD') : null,
+        paymentClearanceDate: x.paymentClearanceDate != null ? moment(x.paymentClearanceDate, Constants.DATE_FORMAT).format('YYYY-MM-DD') : null
+      }));
 
-    this.agreementService.Create({
-      ...this.agreement,
-      "payments": this.agreementPayments
-    }).subscribe(
-      {
-        next: (result: any) => {
-          this.router.navigate(['agreements']);
-        },
-        error: (e) => console.error(e),
-        complete: () => console.info('complete')
-      }
-    );
+      this.agreementService.Create({
+        ...this.agreement,
+        "payments": this.agreementPayments
+      }).subscribe(
+        {
+          next: (result: any) => {
+            this.router.navigate(['agreements']);
+          },
+          error: (e) => console.error(e),
+          complete: () => console.info('complete')
+        }
+      );
+    }
+
   }
   getAllBanks() {
     this.bankService.GetAll().subscribe((result: any) => {
@@ -151,18 +157,18 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
   decline(): void {
     this.modalRef?.hide();
   }
- 
+
   confirm(): void {
     this.modalRef?.hide();
     this.deletePayment(this.paymentIdToDelete);
   }
-  
+
   removePaymentRow(indexToRemove: number, template: TemplateRef<any>) {
     var paymentToDelete = this.agreementPayments[indexToRemove];
     if (paymentToDelete.id > 0) {
       this.paymentIdToDelete = paymentToDelete.id;
       this.paymentIndexToDelete = indexToRemove;
-      this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+      this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
     } else {
       this.agreementPayments.splice(indexToRemove, 1);
     }

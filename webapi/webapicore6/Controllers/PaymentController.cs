@@ -27,7 +27,7 @@ namespace webapicore6.Controllers
             _mapper = mapper;
         }
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet]
         public async Task<IActionResult> GetAllPayments()
         {
@@ -44,7 +44,7 @@ namespace webapicore6.Controllers
         }
 
         //[Authorize(AuthenticationSchemes = "Bearer")]
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("search")]
         public async Task<IActionResult> SearchAllPayments(PaymentFilters filters)
         {
@@ -60,7 +60,7 @@ namespace webapicore6.Controllers
         }
 
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpGet("{agreementid}")]
         public async Task<IActionResult> GetPaymentByAgreementId(int agreementid)
         {
@@ -168,7 +168,7 @@ namespace webapicore6.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeletePayment(int id)
         {
@@ -192,7 +192,7 @@ namespace webapicore6.Controllers
             }
         }
 
-        [AllowAnonymous]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("import")]
         public async Task<IActionResult> Import(IFormFile file)
         {

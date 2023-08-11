@@ -17,7 +17,7 @@ declare var $: any;
   templateUrl: './import-payments.component.html',
   styleUrls: ['./import-payments.component.css']
 })
-export class ImportPaymentsComponent implements AfterViewInit {
+export class ImportPaymentsComponent {
   selectedCompanyId: any;
   selectedMonth: string;
   selectedPaymentMethod: number;
@@ -36,36 +36,10 @@ export class ImportPaymentsComponent implements AfterViewInit {
   payments: Payment[] = [];
   agreements: Agreement[] = [];
   loading: boolean = false;
+  selectedFileName: string = 'Choose a file';
+
   constructor(public paymentService: PaymentService, public agreementService: AgreementService, public bankService: BankService, public companyService: CompanyService) {
 
-  }
-
-  clearSearchFilters() {
-    this.selectedCompanyId = null;
-    this.selectedMonth = null;
-    this.selectedPaymentMethod = null;
-
-
-    this.paymentSearchFilter.agreementId = null;
-    this.paymentSearchFilter.companyId = null;
-    this.paymentSearchFilter.bankId = null;
-    this.paymentSearchFilter.month = null;
-    this.paymentSearchFilter.year = null;
-    this.paymentSearchFilter.paymentMethodId = null;
-    this.paymentSearchFilter.branch = null;
-
-    $('.select2bs4').val('').trigger('change');
-  }
-
-  onPaymentMethodSelected(paymentMethodId: number) {
-    this.selectedPaymentMethod = paymentMethodId;
-    this.paymentSearchFilter.paymentMethodId = this.selectedPaymentMethod;
-  }
-
-  onMonthSelected(month: any) {
-    this.selectedMonth = month;
-    this.paymentSearchFilter.month = month.split('-')[0];
-    this.paymentSearchFilter.year = month.split('-')[1];
   }
 
   paymentStatusOptions = Object.values(PaymentStatusEnum).map(value => ({ name: PaymentStatusEnum[value as number], value }));
@@ -74,6 +48,13 @@ export class ImportPaymentsComponent implements AfterViewInit {
     const files = event.target.files;
     if (files && files.length > 0) {
       this.xlsFile = files[0];
+    }
+
+    const inputFile = event.target as HTMLInputElement;
+    if (inputFile.files && inputFile.files.length > 0) {
+      this.selectedFileName = inputFile.files[0].name;
+    } else {
+      this.selectedFileName = 'Choose file';
     }
   }
 
@@ -93,85 +74,10 @@ export class ImportPaymentsComponent implements AfterViewInit {
     }
   }
 
-  ngOnInit(): void {
-  }
-
-  ngAfterViewInit(): void {
-  }
-
-  searchPayment() {
-    this.paymentService.Search(this.paymentSearchFilter).subscribe((result: any) => {
-      this.payments = result.data.sort((a: Payment, b: Payment) => a.paymentDueDate > b.paymentDueDate ? 1 : -1);
-    });
-  }
-
-  getAgreementByCompanyId() {
-    this.agreementService.GetByCompanyId(this.paymentSearchFilter.companyId).subscribe((result: any) => {
-      this.agreements = result.data.sort((a: Agreement, b: Agreement) => a.startDate > b.startDate ? 1 : -1);
-    });
-  }
-
-
-
-  getAllBanks() {
-    this.bankService.GetAll().subscribe((result: any) => {
-      this.banks = result.data.sort((a: Bank, b: Bank) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
-    });
-    // Add "All" option to the array
-    // this.banks.push({ id: 0, name: 'All' });
-  }
-
-  getAllCompannies() {
-    this.companyService.GetAll().subscribe((result: any) => {
-      this.companies = result.data.sort((a: Company, b: Company) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
-    });
-    // Add "All" option to the array
-    // this.companies.push({ id: 0, name: 'All' });
-  }
-
   getPaymentMethodName(value: number): string {
     return PaymentMethodEnum[value];
   }
   getPaymentStatusName(value: number): string {
     return PaymentStatusEnum[value];
-  }
-
-  jqueryScriptsBinding() {
-    $('.select2bs4').select2({
-      theme: 'bootstrap4',
-      placeholder: "Select an Option"
-    });
-
-    $('#companyDdl').on('select2:select', (e: any) => {
-      var data = e.params.data;
-      this.paymentSearchFilter.companyId = data.id;
-      // this.getAgreementByCompanyId();
-    });
-
-    $('#agreementDdl').on('select2:select', (e: any) => {
-      var data = e.params.data;
-      console.log(data);
-      this.paymentSearchFilter.agreementId = data.id;
-    });
-
-    $('#bankDdl').on('select2:select', (e: any) => {
-      var data = e.params.data;
-      this.paymentSearchFilter.bankId = data.id;
-    });
-
-    // ($("#example1") as any).DataTable({
-    //   "responsive": true, "lengthChange": false, "autoWidth": false,
-    //   "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    // }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-    // ($('#example2') as any).DataTable({
-    //   "paging": true,
-    //   "lengthChange": false,
-    //   "searching": false,
-    //   "ordering": true,
-    //   "info": true,
-    //   "autoWidth": false,
-    //   "responsive": true,
-    // });
   }
 }

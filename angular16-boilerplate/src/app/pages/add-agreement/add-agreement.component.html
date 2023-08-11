@@ -19,69 +19,72 @@
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Start Date:</label>
-                            <input type="text" placeholder="Start Date" class="form-control"
+                            <input  [class.is-invalid]="invalidForm && agreement.startDate == undefined" type="text" placeholder="Start Date" class="form-control"
                                 [(ngModel)]="agreement.startDate" bsDatepicker [bsConfig]="{
                   adaptivePosition: true,
                   dateInputFormat: 'DD-MM-YYYY'
                 }" />
+                <span class="error invalid-feedback">Required field</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>End Date:</label>
-                            <input type="text" placeholder="End Date" class="form-control"
+                            <input type="text" [class.is-invalid]="invalidForm && agreement.endDate == undefined" placeholder="End Date" class="form-control"
                                 [(ngModel)]="agreement.endDate" bsDatepicker [bsConfig]="{
                   adaptivePosition: true,
                   dateInputFormat: 'DD-MM-YYYY'
                 }" />
+                <span class="error invalid-feedback">Required field</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Company</label>
-                            <select id="companyDdl" class="form-control select2bs4" style="width: 100%"
+                            <select id="companyDdl" [class.is-invalid]="invalidForm && agreement.companyId == 0" class="form-control select2bs4" style="width: 100%"
                                 [(ngModel)]="agreement.companyId" name="companyDdl" required #companyDdl="ngModel"
                                 (change)="onCompanySelect($event)">
                                 <option *ngFor="let category of companies" [value]="category.id">
                                     {{ category.name }}
                                 </option>
                             </select>
+                            <span class="error invalid-feedback">Required field</span>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Branch</label>
-                            <input type="text" class="form-control" [(ngModel)]="agreement.branch" />
+                            <input type="text" class="form-control" [(ngModel)]="agreement.branch" placeholder="Type branch name"/>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Floor</label>
-                            <input type="text" class="form-control" [(ngModel)]="agreement.floor" />
+                            <input type="text" class="form-control" [(ngModel)]="agreement.floor"  placeholder="Type floor number"/>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Office No.</label>
-                            <input type="text" class="form-control" [(ngModel)]="agreement.officeNumber" />
+                            <input type="text" class="form-control" [(ngModel)]="agreement.officeNumber" placeholder="Type office number"/>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Section</label>
-                            <input type="text" class="form-control" [(ngModel)]="agreement.section" />
+                            <input type="text" class="form-control" [(ngModel)]="agreement.section" placeholder="Type section"/>
                         </div>
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
                             <label>Work Station</label>
-                            <input type="text" class="form-control" [(ngModel)]="agreement.workStation" />
+                            <input type="text" class="form-control" [(ngModel)]="agreement.workStation" placeholder="Type workstation"/>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label>Notes</label>
-                            <textarea type="text" class="form-control" [(ngModel)]="agreement.description"></textarea>
+                            <textarea type="text" class="form-control" [(ngModel)]="agreement.description" placeholder="Type note about this agreement"></textarea>
                         </div>
                     </div>
                 </div>
@@ -159,7 +162,7 @@
                             <div class="col-sm-1" *ngIf="paymentItem.paymentMethod == 0">
                                 <div class="form-group">
                                     <label>Chq No.</label>
-                                    <input type="text" class="form-control" [(ngModel)]="paymentItem.chequeNo" />
+                                    <input type="text" class="form-control" [(ngModel)]="paymentItem.chequeNo" placeholder="Cheque no"/>
                                 </div>
                             </div>
                             <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
@@ -186,7 +189,7 @@
                                     <label>Notes</label>
                                     <!-- <input type="text" class="form-control" [(ngModel)]="paymentItem.description" /> -->
                                     <textarea type="text" class="form-control"
-                                        [(ngModel)]="paymentItem.description"></textarea>
+                                        [(ngModel)]="paymentItem.description" placeholder="Type note about this payment"></textarea>
                                 </div>
                             </div>
                         </div>

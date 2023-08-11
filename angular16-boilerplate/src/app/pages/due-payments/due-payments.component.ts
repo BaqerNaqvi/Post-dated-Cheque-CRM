@@ -18,8 +18,10 @@ declare var $: any;
   styleUrls: ['./due-payments.component.css']
 })
 export class DuePaymentsComponent implements AfterViewInit {
+  currentDate = new Date();
+  selectedMonthParent: string = (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getFullYear();
   selectedCompanyId: any;
-  selectedMonth: string;
+  loading: boolean = false;
   selectedPaymentMethod: number;
 
   paymentSearchFilter: any = {
@@ -42,7 +44,7 @@ export class DuePaymentsComponent implements AfterViewInit {
 
   clearSearchFilters() {
     this.selectedCompanyId = null;
-    this.selectedMonth = null;
+    this.selectedMonthParent = null;
     this.selectedPaymentMethod = null;
 
 
@@ -63,7 +65,7 @@ export class DuePaymentsComponent implements AfterViewInit {
   }
 
   onMonthSelected(month: any) {
-    this.selectedMonth = month;
+    this.selectedMonthParent = month;
     this.paymentSearchFilter.month = month.split('-')[0];
     this.paymentSearchFilter.year = month.split('-')[1];
   }
@@ -76,7 +78,6 @@ export class DuePaymentsComponent implements AfterViewInit {
     this.getAllCompannies();
     setTimeout(() => {
       this.jqueryScriptsBinding();
-      this.clearSearchFilters();
     }, 200);
   }
 
@@ -86,8 +87,10 @@ export class DuePaymentsComponent implements AfterViewInit {
   }
 
   searchPayment() {
+    this.loading = true;
     this.paymentService.Search(this.paymentSearchFilter).subscribe((result: any) => {
       this.payments = result.data.sort((a: Payment, b: Payment) => a.paymentDueDate > b.paymentDueDate ? 1 : -1);
+      this.loading = false;
     });
   }
 
@@ -102,17 +105,15 @@ export class DuePaymentsComponent implements AfterViewInit {
   getAllBanks() {
     this.bankService.GetAll().subscribe((result: any) => {
       this.banks = result.data.sort((a: Bank, b: Bank) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
+      this.banks.unshift({ id: null, name: 'All' });
     });
-    // Add "All" option to the array
-    // this.banks.push({ id: 0, name: 'All' });
   }
 
   getAllCompannies() {
     this.companyService.GetAll().subscribe((result: any) => {
       this.companies = result.data.sort((a: Company, b: Company) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
+      this.companies.unshift({ id: null, name: 'All' });
     });
-    // Add "All" option to the array
-    // this.companies.push({ id: 0, name: 'All' });
   }
 
   getPaymentMethodName(value: number): string {
@@ -130,7 +131,7 @@ export class DuePaymentsComponent implements AfterViewInit {
 
     $('#companyDdl').on('select2:select', (e: any) => {
       var data = e.params.data;
-      this.paymentSearchFilter.companyId = data.id;
+      this.paymentSearchFilter.companyId = data.id == "null" ? null : data.id;
       // this.getAgreementByCompanyId();
     });
 
@@ -142,7 +143,7 @@ export class DuePaymentsComponent implements AfterViewInit {
 
     $('#bankDdl').on('select2:select', (e: any) => {
       var data = e.params.data;
-      this.paymentSearchFilter.bankId = data.id;
+      this.paymentSearchFilter.bankId = data.id == "null" ? null : data.id;
     });
 
     // ($("#example1") as any).DataTable({

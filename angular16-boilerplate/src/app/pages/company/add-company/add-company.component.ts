@@ -10,6 +10,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 })
 export class AddCompanyComponent implements OnInit {
   company: Company = new Company(0, '');
+  validForm:boolean = true;
   constructor(private _location: Location, public companyService: CompanyService, private route: ActivatedRoute,
     private router: Router) { }
 
@@ -32,14 +33,19 @@ export class AddCompanyComponent implements OnInit {
   }
 
   submitCompany() {
-    this.companyService.Create(this.company).subscribe(
-      {
-        next: (result: any) => {
-          this.router.navigate(['companies']);
-        },
-        error: (e) => console.error(e),
-        complete: () => console.info('complete')
-      }
-    );
+    if(this.company.name == ""){
+      this.validForm = false
+    }else{
+      this.companyService.Create(this.company).subscribe(
+        {
+          next: (result: any) => {
+            this.router.navigate(['companies']);
+          },
+          error: (e) => console.error(e),
+          complete: () => console.info('complete')
+        }
+      );
+    }
+    
   }
 }
