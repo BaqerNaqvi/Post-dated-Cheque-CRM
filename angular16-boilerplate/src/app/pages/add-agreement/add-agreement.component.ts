@@ -207,8 +207,10 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
       const selectedIndex = e.target.getAttribute('data-index');
       if (selectedIndex !== null) {
         const index = parseInt(selectedIndex, 10);
-        this.agreementPayments[index].senderBankId = data.id;
-        console.log('Selected value:', data.id, ' for index:', index);
+        if (e.target.getAttribute('data-bank') == "sender")
+          this.agreementPayments[index].senderBankId = data.id;
+        else
+          this.agreementPayments[index].receiverBankId = data.id;
       }
     });
   }

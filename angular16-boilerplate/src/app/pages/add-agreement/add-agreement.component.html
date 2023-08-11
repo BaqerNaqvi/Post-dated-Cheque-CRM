@@ -165,12 +165,25 @@
                                     <input type="text" class="form-control" [(ngModel)]="paymentItem.chequeNo" placeholder="Cheque no"/>
                                 </div>
                             </div>
-                            <div class="col-sm-2" *ngIf="paymentItem.paymentMethod == 0">
+                            <div class="col-sm-2"  style="width: 10%" *ngIf="paymentItem.paymentMethod == 0">
                                 <div class="form-group">
                                     <label>Chq Bank</label>
                                     <select class="form-control select2bs4" style="width: 100%"
                                         [(ngModel)]="paymentItem.senderBankId" required initializeSelect2
-                                        [attr.data-index]="i">
+                                        [attr.data-index]="i" data-bank="sender">
+                                        <option *ngFor="let bank of banks" [value]="bank.id">
+                                            {{ bank.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-2" style="width: 10%">
+                                <div class="form-group">
+                                    <label>Rcvr Bank</label>
+                                    <select class="form-control select2bs4" style="width: 100%"
+                                        [(ngModel)]="paymentItem.receiverBankId" required initializeSelect2
+                                        [attr.data-index]="i" data-bank="receiver">
                                         <option *ngFor="let bank of banks" [value]="bank.id">
                                             {{ bank.name }}
                                         </option>
@@ -184,7 +197,7 @@
                                         (selectedPaymentStatusChange)="onPaymentMethodStatus($event, i)"></app-payment-status-select>
                                 </div>
                             </div>
-                            <div class="col-sm-2" style="width: 22%">
+                            <div class="col-sm-2" style="width: 18%">
                                 <div class="form-group">
                                     <label>Notes</label>
                                     <!-- <input type="text" class="form-control" [(ngModel)]="paymentItem.description" /> -->

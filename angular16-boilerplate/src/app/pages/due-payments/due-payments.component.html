@@ -84,8 +84,8 @@
             <table id="example1" class="table table-bordered table-striped">
               <thead>
                 <tr>
-                  <th style="min-width: 200px">Company</th>
-                  <th style="min-width: 100px">Due Date</th>
+                  <th style="min-width: 180px">Company</th>
+                  <th style="min-width: 120px">Due Date</th>
                   <th style="min-width: 90px">Amount</th>
 
                   <th style="min-width: 122px">Pymt Method</th>
@@ -97,7 +97,8 @@
                   <!-- <th>Clearance Date</th> -->
 
                   <th style="min-width: 200px">Chq Bank</th>
-                  <th style="min-width: 300px">Notes</th>
+                  <th style="min-width: 200px">Rcvr Bank</th>
+                  <th style="min-width: 200px">Notes</th>
                   <th></th>
                 </tr>
               </thead>
@@ -115,6 +116,7 @@
                   <!-- <td>{{paymentItem.paymentClearanceDate | date:'dd-MMM-y'}}</td> -->
 
                   <td>{{ paymentItem.senderBankName }}</td>
+                  <td>{{ paymentItem.receiverBankName }}</td>
                   <td>{{ paymentItem.description }}</td>
                   <td>
                     <a [routerLink]="['/agreements/'+paymentItem.agreementId]">Edit</a>
