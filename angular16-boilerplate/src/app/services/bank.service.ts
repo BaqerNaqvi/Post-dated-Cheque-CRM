@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Bank } from '../shared/models/bank';
-import { backendUrl } from '../shared/models/app.constants';
+import { backendUrl } from '../shared/constants/app-constants';
 
 @Injectable({
   providedIn: 'root'

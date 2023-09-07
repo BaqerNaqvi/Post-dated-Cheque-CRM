@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   policy =>
                                   {
-                                      policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                                      policy.WithOrigins("http://pdc-portal.com", "http://10.2.0.6").AllowAnyHeader().AllowAnyMethod();
                                   });
             });
 var configuration = builder.Configuration;

@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using webapicore6.Models;
 using webapicore6.Models.Common;
 using webapicore6.Models.Identity;
 
@@ -94,6 +95,19 @@ namespace webapicore6.Controllers
             return Unauthorized();
         }
 
+        [AllowAnonymous]
+        [HttpGet("test")]
+        public async Task<IActionResult> GetTest()
+        {
+            try
+            {
+                return Ok("Test passed");
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Test failed");
+            }
+        }
         private string GenerateJwtToken(IdentityUser user, IList<string> roles)
         {
             var claims = new List<Claim>

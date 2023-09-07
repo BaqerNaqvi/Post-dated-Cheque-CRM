@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { backendUrl } from '../shared/models/app.constants';
+import { backendUrl } from '../shared/constants/app-constants';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, catchError, of, retry, tap, throwError } from 'rxjs';
 
