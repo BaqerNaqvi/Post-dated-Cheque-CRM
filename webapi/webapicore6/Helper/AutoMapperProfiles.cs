@@ -9,6 +9,27 @@ namespace webapicore6.Helper
 {
     public class AutoMapperProfiles : Profile
     {
+        public string BuildCompanyBranchOfc(Agreement agreement)
+        {
+            var companyBranchOfc = agreement.Company.Name;
+
+            if (!string.IsNullOrWhiteSpace(agreement.Floor))
+            {
+                companyBranchOfc += " - Floor " + agreement.Floor;
+            }
+
+            if (!string.IsNullOrWhiteSpace(agreement.OfficeNumber))
+            {
+                companyBranchOfc += " - Office " + agreement.OfficeNumber;
+            }
+
+            if (!string.IsNullOrWhiteSpace(agreement.Branch))
+            {
+                companyBranchOfc += " - " + agreement.Branch;
+            }
+
+            return companyBranchOfc;
+        }
         public AutoMapperProfiles()
         {
             CreateMap<IdentityUser, User>();
@@ -17,7 +38,7 @@ namespace webapicore6.Helper
             CreateMap<Payment, PaymentListDto>()
             .ForMember(e => e.AgreementDates, PL => PL.MapFrom(q => q.Agreement.StartDate.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture) + " : " + q.Agreement.EndDate.ToString("dd-MMM-yyyy", CultureInfo.InvariantCulture)))
             .ForMember(e => e.CompanyName, PL => PL.MapFrom(q => q.Agreement.Company.Name))
-            .ForMember(e => e.CompanyBranchOfc, PL => PL.MapFrom(q => q.Agreement.Company.Name + " - " + q.Agreement.Branch + " - " + q.Agreement.OfficeNumber))
+            .ForMember( e => e.CompanyBranchOfc, PL => PL.MapFrom(q => BuildCompanyBranchOfc(q.Agreement)))
             .ForMember(e => e.SenderBankName, PL => PL.MapFrom(src => src.SenderBank != null ? src.SenderBank.Name : null))
             .ForMember(e => e.ReceiverBankName, PL => PL.MapFrom(src => src.ReceiverBank != null ? src.ReceiverBank.Name : null));
 

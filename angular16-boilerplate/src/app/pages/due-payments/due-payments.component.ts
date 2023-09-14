@@ -28,6 +28,7 @@ export class DuePaymentsComponent implements AfterViewInit {
     agreementId: null,
     companyId: null,
     bankId: null,
+    receiverBankId: null,
     month: null,
     year: null,
     paymentMethodId: null,
@@ -144,6 +145,11 @@ export class DuePaymentsComponent implements AfterViewInit {
     $('#bankDdl').on('select2:select', (e: any) => {
       var data = e.params.data;
       this.paymentSearchFilter.bankId = data.id == "null" ? null : data.id;
+    });
+
+    $('#rcvrBankDdl').on('select2:select', (e: any) => {
+      var data = e.params.data;
+      this.paymentSearchFilter.receiverBankId = data.id == "null" ? null : data.id;
     });
 
     // ($("#example1") as any).DataTable({

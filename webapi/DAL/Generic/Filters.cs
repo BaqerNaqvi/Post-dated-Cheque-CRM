@@ -19,6 +19,7 @@
     {
         public int? agreementId { get; set; }
         public int? bankId { get; set; }
+        public int? receiverBankId { get; set; }
         public int? paymentMethodId { get; set; }
         public int? companyId { get; set; }
         public int? month { get; set; }

@@ -24,6 +24,7 @@ namespace DAL.Implementations
                    (paymentFilters.agreementId == null || paymentFilters.agreementId == f.AgreementId)
                 && (paymentFilters.companyId == null || paymentFilters.companyId == f.Agreement.CompanyId)
                 && (paymentFilters.bankId == null || paymentFilters.bankId == f.SenderBankId)
+                && (paymentFilters.receiverBankId == null || paymentFilters.receiverBankId == f.ReceiverBankId)
                 && (paymentFilters.paymentMethodId == null || paymentFilters.paymentMethodId == f.PaymentMethod)
                 && (paymentFilters.month == null || paymentFilters.month == f.PaymentDueDate.Month || f.ChequeDueDate.Value.Month == paymentFilters.month)
                 && (paymentFilters.year == null || paymentFilters.year == f.PaymentDueDate.Year || f.ChequeDueDate.Value.Year == paymentFilters.year)

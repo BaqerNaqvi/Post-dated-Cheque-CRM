@@ -67,6 +67,16 @@
               </div>
               <div class="col-sm-2">
                 <div class="form-group">
+                  <label for="rcvrBankDdl">Receiver Bank</label>
+                  <select id="rcvrBankDdl" class="form-control select2bs4" style="width: 100%;"
+                    [(ngModel)]="paymentSearchFilter.receiverBankId" name="rcvrBankDdl" required>
+                    <option *ngFor="let category of banks" [value]="category.id">
+                      {{category.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2">
+                <div class="form-group">
                   <label for="agreementDdl">Branch</label>
                   <input type="text" id="branchTxt" class="form-control" [(ngModel)]="paymentSearchFilter.branch"
                     name="branchTxt" required />
@@ -86,18 +96,18 @@
                 <tr>
                   <th style="min-width: 180px">Company</th>
                   <th style="min-width: 120px">Due Date</th>
-                  <th style="min-width: 90px">Amount</th>
+                  <th style="min-width: 78px">Amount</th>
 
                   <th style="min-width: 122px">Pymt Method</th>
                   <!-- <th>Agreement</th> -->
-                  <th style="min-width: 90px">Chq No</th>
+                  <th style="min-width: 77px">Chq No</th>
                   <th style="min-width: 122px">Chq Due Date</th>
 
-                  <th style="min-width: 85px">Status</th>
+                  <th style="min-width: 77px">Status</th>
                   <!-- <th>Clearance Date</th> -->
 
-                  <th style="min-width: 200px">Chq Bank</th>
-                  <th style="min-width: 200px">Rcvr Bank</th>
+                  <th style="min-width: 150px">Chq Bank</th>
+                  <th style="min-width: 150px">Rcvr Bank</th>
                   <th style="min-width: 200px">Notes</th>
                   <th></th>
                 </tr>
