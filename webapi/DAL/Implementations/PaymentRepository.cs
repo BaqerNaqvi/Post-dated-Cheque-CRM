@@ -30,7 +30,7 @@ namespace DAL.Implementations
                 && (paymentFilters.branch == null || paymentFilters.branch == "" || paymentFilters.branch == f.Agreement.Branch)
                 ).OrderBy(x => x.ChequeDueDate).AsQueryable();
 
-            return await PagedList<Payment>.CreateAsync(query, paymentFilters.PageNumber, paymentFilters.PageSize);
+            return await query.ToListAsync();
         }
 
         public async Task<List<Payment>> GetPaymentByAgreementIdAsync(int agreementid)

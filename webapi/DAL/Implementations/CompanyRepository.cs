@@ -25,7 +25,7 @@ namespace DAL.Implementations
                    (filters.name == null || f.Name.Contains(filters.name))
             ).OrderBy(x => x.Name).AsQueryable();
 
-            return await PagedList<Company>.CreateAsync(query, filters.PageNumber, filters.PageSize);
+            return await query.ToListAsync();
         }
     }
 }

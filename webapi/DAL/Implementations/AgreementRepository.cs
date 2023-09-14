@@ -24,7 +24,7 @@ namespace DAL.Implementations
                    (filters.companyId == null || filters.companyId == f.CompanyId)
             ).OrderBy(x => x.StartDate).AsQueryable();
 
-            return await PagedList<Agreement>.CreateAsync(query, filters.PageNumber, filters.PageSize);
+            return await query.ToListAsync();
         }
 
         public async Task<List<Agreement>> GetByCompanyIdAsync(int id)
