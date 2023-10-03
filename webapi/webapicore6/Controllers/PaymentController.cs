@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BAL.Interfaces;
+using DAL.Enums;
 using DAL.Generic;
 using DAL.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -51,11 +52,17 @@ namespace webapicore6.Controllers
             try
             {
                 var results = await _service.GetByFilters(filters);
-                return Ok(new ResponseDto<List<PaymentListDto>>(HttpStatusCode.OK, "", _mapper.Map<List<PaymentListDto>>(results)));
+                var paymentStats = new PaymentStatsWrapper();
+                paymentStats.Payments = _mapper.Map<List<PaymentListDto>>(results);
+                paymentStats.TotalPayments = paymentStats.Payments.Sum(x => x.Amount);
+                paymentStats.TotalDue = paymentStats.Payments.Where(x=>x.PaymentStatus!= (int)PaymentStatus.Paid).Sum(x => x.Amount);
+                paymentStats.TotalReceived = paymentStats.Payments.Where(x => x.PaymentStatus == (int)PaymentStatus.Paid).Sum(x => x.Amount);
+
+                return Ok(new ResponseDto<PaymentStatsWrapper>(HttpStatusCode.OK, "", paymentStats));
             }
             catch (Exception e)
             {
-                return Ok(new ResponseDto<List<Payment>>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
+                return Ok(new ResponseDto<PaymentStatsWrapper>(HttpStatusCode.InternalServerError, e.Message, null, null, e.InnerException?.Message));
             }
         }
 

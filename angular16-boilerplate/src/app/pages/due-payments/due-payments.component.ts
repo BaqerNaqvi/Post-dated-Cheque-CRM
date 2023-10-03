@@ -21,8 +21,11 @@ export class DuePaymentsComponent implements AfterViewInit {
   currentDate = new Date();
   selectedMonthParent: string = (this.currentDate.getMonth() + 1) + "-" + this.currentDate.getFullYear();
   selectedCompanyId: any;
-  loading: boolean = false;
+  loading: boolean;
   selectedPaymentMethod: number;
+  totalPayment: number;
+  totalReceived: number;
+  totalDue: number;
 
   paymentSearchFilter: any = {
     agreementId: null,
@@ -88,9 +91,14 @@ export class DuePaymentsComponent implements AfterViewInit {
   }
 
   searchPayment() {
-    this.loading = true;
+    setTimeout(() => {
+      this.loading = true;
+    }, 10);
     this.paymentService.Search(this.paymentSearchFilter).subscribe((result: any) => {
-      this.payments = result.data.sort((a: Payment, b: Payment) => a.paymentDueDate > b.paymentDueDate ? 1 : -1);
+      this.payments = result.data?.payments?.sort((a: Payment, b: Payment) => a.paymentDueDate > b.paymentDueDate ? 1 : -1);
+      this.totalDue = result.data?.totalDue;
+      this.totalPayment = result.data?.totalPayments;
+      this.totalReceived = result.data?.totalReceived;
       this.loading = false;
     });
   }
@@ -151,20 +159,5 @@ export class DuePaymentsComponent implements AfterViewInit {
       var data = e.params.data;
       this.paymentSearchFilter.receiverBankId = data.id == "null" ? null : data.id;
     });
-
-    // ($("#example1") as any).DataTable({
-    //   "responsive": true, "lengthChange": false, "autoWidth": false,
-    //   "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    // }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-
-    // ($('#example2') as any).DataTable({
-    //   "paging": true,
-    //   "lengthChange": false,
-    //   "searching": false,
-    //   "ordering": true,
-    //   "info": true,
-    //   "autoWidth": false,
-    //   "responsive": true,
-    // });
   }
 }

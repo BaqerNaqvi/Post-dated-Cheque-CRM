@@ -20,10 +20,10 @@ export class MonthsComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.populateMonths();
-    // $('#monthDdl').select2({
-    //   theme: 'bootstrap4',
-    //   placeholder: "Select an Option"
-    // });
+    $('#monthDdl').select2({
+      theme: 'bootstrap4',
+      placeholder: "Select an Option"
+    });
     $('#monthDdl').on('select2:select', (e: any) => {
       const data = e.params.data;
       this.selectedMonth = data.id;

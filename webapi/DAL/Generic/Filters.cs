@@ -30,6 +30,8 @@
     public class AgreementFilters : PagingParams
     {
         public int? companyId { get; set; }
+        public int? month { get; set; }
+        public int? year { get; set; }
     }
 
     public class CompanyFilters : PagingParams

@@ -22,6 +22,18 @@ namespace DAL.Implementations
         {
             IQueryable<Agreement> query = _context.Agreements.Where(f =>
                    (filters.companyId == null || filters.companyId == f.CompanyId)
+                    && (
+                        (filters.month == null || filters.year == null) || // No month or year filter
+                        (
+                            (filters.year >= f.StartDate.Year && filters.year <= f.EndDate.Year) && // Year is within range
+                                (
+                                    (filters.year == f.StartDate.Year && filters.year == f.EndDate.Year && filters.month >= f.StartDate.Month && filters.month <= f.EndDate.Month) || // Same year
+                                    (filters.year == f.StartDate.Year && filters.year != f.EndDate.Year && filters.month >= f.StartDate.Month) || // Different end year
+                                    (filters.year != f.StartDate.Year && filters.year == f.EndDate.Year && filters.month <= f.EndDate.Month) || // Different start year
+                                    (filters.year != f.StartDate.Year && filters.year != f.EndDate.Year) // Different start and end year
+                                )
+                        )
+                    )
             ).OrderBy(x => x.StartDate).AsQueryable();
 
             return await query.ToListAsync();
@@ -35,6 +47,6 @@ namespace DAL.Implementations
 
             return await query.ToListAsync();
         }
-        
+
     }
 }

@@ -15,17 +15,22 @@ namespace webapicore6.Helper
 
             if (!string.IsNullOrWhiteSpace(agreement.Floor))
             {
-                companyBranchOfc += " - Floor " + agreement.Floor;
+                companyBranchOfc += " - F " + agreement.Floor;
             }
 
             if (!string.IsNullOrWhiteSpace(agreement.OfficeNumber))
             {
-                companyBranchOfc += " - Office " + agreement.OfficeNumber;
+                companyBranchOfc += " - O " + agreement.OfficeNumber;
             }
 
             if (!string.IsNullOrWhiteSpace(agreement.Branch))
             {
-                companyBranchOfc += " - " + agreement.Branch;
+                companyBranchOfc += " - B " + agreement.Branch;
+            }
+
+            if (!string.IsNullOrWhiteSpace(agreement.WorkStation))
+            {
+                companyBranchOfc += " - WS " + agreement.WorkStation;
             }
 
             return companyBranchOfc;

@@ -11,8 +11,21 @@
 
 .mr_5 {
     margin-right: 5px;
-    ;
 }
+
+.ml_5 {
+    margin-left: 5px;
+}
+
+.mr_15 {
+    margin-right: 15px;
+}
+
+.card-header-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
 .mlr-50 {
     margin: 0 50px !important;
@@ -77,4 +90,16 @@
 
 #importResultTable th:nth-child(10) {
     min-width: 30px;
+}
+
+.font-color-green{
+    color: #09c333;
+}
+
+.font-color-red{
+    color: rgb(219, 8, 8);
+}
+
+.font-color-blue{
+    color: rgb(71, 8, 219);
 }

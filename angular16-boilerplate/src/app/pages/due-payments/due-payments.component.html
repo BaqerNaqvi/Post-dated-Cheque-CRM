@@ -87,13 +87,17 @@
           </div>
         </div>
         <div class="card">
-          <div class="card-header">
-            <h3 class="card-title">Due Payments</h3>
+          <div class="card-header card-header-stats">
+            <h3 class="card-title ml_5"><b>Payment Stat(s):</b></h3>
+            <span class="font-color-blue"><b>Total Amount:</b> {{totalPayment}}</span>
+            <span class="float-right mr_15 font-color-green"><b>Total Paid:</b> {{totalReceived}}</span>
+            <span class="float-right mr_5 font-color-red"><b>Total Due:</b> {{totalDue}}</span>
           </div>
           <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
               <thead>
                 <tr>
+                  <th style="min-width: 50px">No.</th>
                   <th style="min-width: 180px">Company</th>
                   <th style="min-width: 120px">Due Date</th>
                   <th style="min-width: 78px">Amount</th>
@@ -114,6 +118,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let paymentItem of payments; let i = index">
+                  <td>{{ i+1 }}</td>
                   <td>{{ paymentItem.companyBranchOfc }}</td>
                   <td>{{ paymentItem.paymentDueDate | date : "dd-MMM-y" }}</td>
                   <td>{{ paymentItem.amount }}</td>
