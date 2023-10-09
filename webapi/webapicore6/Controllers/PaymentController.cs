@@ -223,24 +223,24 @@ namespace webapicore6.Controllers
                         return BadRequest("Invalid Excel file format.");
                     }
 
-                    int endingRow = 40;
-                    for (int row = worksheet.LastRowNum; row >= endingRow; row--)
+                    int endingRow = worksheet.LastRowNum;
+                    for (int row = worksheet.FirstRowNum; row <= endingRow; row++)
                     {
                         var currentRow = worksheet.GetRow(row);
-                        var cell18 = currentRow.GetCell(18);//Description
+                        var descCell = currentRow.GetCell(2);//Description, starting index 0
 
-                        if (cell18 != null)
+                        if (descCell != null)
                         {
-                            var cell18Value = cell18.StringCellValue;
-                            if (cell18Value == "Closing Balance")
+                            var descCellValue = descCell.StringCellValue;
+                            if (descCellValue == "Closing Balance")
                             {
-                                endingRow = row + 1;
+                                endingRow = row - 1;
                             }
-                            else if (cell18Value != "Opening Balance" && (cell18Value.Contains("PDC Deposit") || cell18Value.Contains("Returned Cheque")))
+                            else if (descCellValue != "Opening Balance" && (descCellValue.Contains("PDC Deposit") || descCellValue.Contains("Returned Cheque")))
                             {
                                 var rowData = new Dictionary<string, object>();
 
-                                var headers = new[] { 7, 9, 18, 29, 30 };
+                                var headers = new[] { 0,1,2,3,4,5 };
                                 for (int headerIndex = 0; headerIndex < headers.Length; headerIndex++)
                                 {
                                     var cell = currentRow.GetCell(headers[headerIndex]);
@@ -271,11 +271,12 @@ namespace webapicore6.Controllers
         {
             switch (cellAddress)
             {
-                case 7: return "TRAN DATE";
-                case 9: return "REF NO / CHQ NO";
-                case 18: return "DESCRIPTION";
-                case 29: return "DEBIT";
-                case 30: return "CREDIT";
+                case 0: return "TRAN DATE";
+                case 1: return "REF NO / CHQ NO";
+                case 2: return "DESCRIPTION";
+                case 3: return "DEBIT";
+                case 4: return "CREDIT";
+                case 5: return "BOOK BALANCE";
                 default: return string.Empty;
             }
         }
