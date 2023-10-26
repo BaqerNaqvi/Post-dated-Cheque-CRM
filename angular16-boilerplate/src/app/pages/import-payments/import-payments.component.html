@@ -30,7 +30,7 @@
                                                 <label class="custom-file-label" for="inputFile">{{ selectedFileName }}</label>
                                             </div>
                                             <div class="input-group-append">
-                                                <button class="input-group-text" type="submit">Upload</button>
+                                                <button class="input-group-text" [disabled]="selectedFileName=='Choose file'" type="submit">Upload</button>
                                             </div>
                                         </div>
                                     </div>
