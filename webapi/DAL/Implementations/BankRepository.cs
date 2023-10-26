@@ -21,7 +21,7 @@ namespace DAL.Implementations
         public async Task<Bank> GetBankByNameAsync(string bankName)
         {
             Bank bank = await _context.Banks.FirstOrDefaultAsync(f =>
-                bankName == f.Name);
+                bankName.Contains(f.Name));
 
             return bank;
         }
