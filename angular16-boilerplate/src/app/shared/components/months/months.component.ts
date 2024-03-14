@@ -45,7 +45,7 @@ export class MonthsComponent implements AfterViewInit {
       const year = currentYear + Math.floor((currentMonth + i - 1) / 12); // Increment year after December
 
       const month: Month = {
-        id: monthNumber + '-' + year,
+        id: (monthNumber<0?12+monthNumber:monthNumber) + '-' + year,
         name: this.getMonthWithYear(monthNumber, year),
       };
 
@@ -68,6 +68,6 @@ export class MonthsComponent implements AfterViewInit {
       'November',
       'December',
     ];
-    return `${monthNames[monthNumber - 1]}-${year}`;
+    return `${monthNames[(monthNumber<0?12+monthNumber:monthNumber) - 1]}-${year}`;
   }
 }
