@@ -101,13 +101,13 @@
                   <th style="min-width: 180px">Company</th>
                   <th style="min-width: 120px">Due Date</th>
                   <th style="min-width: 78px">Amount</th>
+                  <th style="min-width: 77px">Status</th>
 
                   <th style="min-width: 122px">Pymt Method</th>
                   <!-- <th>Agreement</th> -->
                   <th style="min-width: 77px">Chq No</th>
                   <th style="min-width: 122px">Chq Due Date</th>
 
-                  <th style="min-width: 77px">Status</th>
                   <!-- <th>Clearance Date</th> -->
 
                   <th style="min-width: 150px">Chq Bank</th>
@@ -122,12 +122,13 @@
                   <td>{{ paymentItem.companyBranchOfc }}</td>
                   <td>{{ paymentItem.paymentDueDate | date : "dd-MMM-y" }}</td>
                   <td>{{ paymentItem.amount }}</td>
+                  <td>{{ getPaymentStatusName(paymentItem.paymentStatus)}}</td>
+
                   <td>{{ getPaymentMethodName(paymentItem.paymentMethod) }}</td>
                   <!-- <td>{{paymentItem.agreementDates}}</td> -->
                   <td>{{ paymentItem.chequeNo }}</td>
                   <td>{{ paymentItem.chequeDueDate | date : "dd-MMM-y" }}</td>
 
-                  <td>{{ getPaymentStatusName(paymentItem.paymentStatus)}}</td>
                   <!-- <td>{{paymentItem.paymentClearanceDate | date:'dd-MMM-y'}}</td> -->
 
                   <td>{{ paymentItem.senderBankName }}</td>

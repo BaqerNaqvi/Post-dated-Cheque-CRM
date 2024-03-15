@@ -76,6 +76,11 @@ export class AddAgreementComponent implements AfterViewInit, OnInit {
 
   onPaymentMethodSelected(paymentMethodId: number, paymentItemIndex: number) {
     this.agreementPayments[paymentItemIndex].paymentMethod = paymentMethodId;
+    this.agreementPayments[paymentItemIndex].chequeDueDate = null;
+    this.agreementPayments[paymentItemIndex].chequeNo = null;
+    this.agreementPayments[paymentItemIndex].senderBankId = null;
+    this.agreementPayments[paymentItemIndex].receiverBankId = null;
+
   }
 
   onPaymentMethodStatus(paymentStatusId: number, paymentItemIndex: number) {
