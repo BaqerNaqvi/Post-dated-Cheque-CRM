@@ -29,7 +29,13 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "fileReplacements": [
+              {
+                "replace": "src/environments/version.ts",
+                "with": "src/environments/version.prod.ts"
+              }
+            ]
           },
           "configurations": {
             "production": {
